@@ -29,6 +29,7 @@ public class HClusterer {
 
     /**
      * Constructor
+     * [SINGLE|COMPLETE|AVERAGE|MEAN|CENTROID|WARD|ADJCOMLPETE|NEIGHBOR_JOINING]
      * @param linkageMethod: see weka's <code>HierarchicalClusterer.TAGS_LINK_TYPE</code>
      * @param nClusters: number of clusters at the top level of hierarchy
      * @param clusterNumLeavesThreshold: maximum number of leaves per flattened cluster
