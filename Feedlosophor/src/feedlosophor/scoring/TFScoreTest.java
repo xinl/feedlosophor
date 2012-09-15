@@ -1,13 +1,8 @@
 package feedlosophor.scoring;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.FileReader;
 import java.io.IOException;
-
-import org.json.JSONArray;
-
-import feedlosophor.clusterer.HClusterer;
 
 public class TFScoreTest {
 
@@ -41,7 +36,7 @@ public class TFScoreTest {
 		String[] ids = {"romney_1", "romney_2", "romney_3", "romney_4", "romney_5", "romney_6",
 				"iphone_1", "iphone_2", "iphone_3", "iphone_4", "iphone_5", "iphone_6",
 				"nasa_1", "nasa_2", "nasa_3", "nasa_4", "nasa_5",
-				"xijinping_1", "xijinping_2",
+				"xijinping_1", "xijinping_2"
 		};		
 
 		TFCalculator tfc = new TFCalculator(input, ids);
