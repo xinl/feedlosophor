@@ -8,12 +8,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import weka.clusterers.HierarchicalClusterer;
+import weka.clusterers.HierarchicalClusterer; // this is my port of the cluster
 import weka.core.DistanceFunction;
 import weka.core.EuclideanDistance;
 import weka.core.Instances;
 import weka.core.SelectedTag;
 import org.json.*;
+
+import feedlosophor.scoring.TFScoreTest;
 
 /**
  * A wrapper class for Weka's <code>HierarchicalClusterer</code>.
@@ -91,16 +93,12 @@ public class HClusterer {
             if (tree.get(2) instanceof JSONArray) {
                 collapse((JSONArray) ((JSONArray) tree).get(2), flattened);
             } else {
-                leaves.add((JSONObject)tree.get(2));
-                flattened.put(leaves.get(0));
-                leaves.remove(0);
+                flattened.put((JSONObject)tree.get(2));
             }
             if (tree.get(3) instanceof JSONArray) {
                 collapse((JSONArray) ((JSONArray) tree).get(3), flattened);
             } else {
-                leaves.add((JSONObject)tree.get(3));
-                flattened.put(leaves.get(0));
-                leaves.remove(0);
+                flattened.put((JSONObject)tree.get(3));
             }
         } else {
             if (tree.get(2) instanceof JSONArray) {
@@ -206,7 +204,7 @@ public class HClusterer {
                 "\n" + 
                 "";
         try {
-            HClusterer hc = new HClusterer("WARD", 1, 5, 100);
+            HClusterer hc = new HClusterer("AVERAGE", 1, 5, 100);
             String jsonHierachy = hc.getJsonHierachy(new ByteArrayInputStream(rawData.getBytes("UTF-8")));
             System.out.println(jsonHierachy);
             String result = hc.getClusters(jsonHierachy);
@@ -216,26 +214,12 @@ public class HClusterer {
             for (int i = 0; i < jsonResult.length(); ++i)
                 System.out.println(jsonResult.get(i));
             
-            
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         
-//        try {
-//            //[SINGLE|COMPLETE|AVERAGE|MEAN|CENTROID|WARD|ADJCOMLPETE|NEIGHBOR_JOINING]
-//            HClusterer hc = new HClusterer("AVERAGE", 2, 6, 5.5);
-//            String jsonHierachy = hc.getJsonHierachy(new ByteArrayInputStream(tfc.getResult().getBytes("UTF-8")));
-//            System.out.println(jsonHierachy);
-//            String result = hc.getClusters(jsonHierachy);
-//            System.out.println(result);
-//            JSONArray jsonResult = new JSONArray(result);
-//            System.out.println(jsonResult.length() + " clusters:");
-//            for (int i = 0; i < jsonResult.length(); ++i)
-//                System.out.println(jsonResult.get(i));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        TFScoreTest.TestCluster("AVERAGE", 1, 5, 6);
 
     }
 

@@ -13,7 +13,6 @@ public class TFScoreTest {
 
 	public static void main(String[] args) {
 		Test();
-	        TestCluster();
 	}
 
 	public static void Test() {
@@ -81,7 +80,7 @@ public class TFScoreTest {
 		return sb.toString();
 	}
 	
-	       public static void TestCluster() {
+	       public static void TestCluster(String linkageMethod, int nClusters, int clusterNumLeavesThreshold, double clusterDistThreshold) {
 
 
 	                String[] input = {readFile("test_files/1_romney.txt"),
@@ -112,14 +111,14 @@ public class TFScoreTest {
 
 	                TFCalculator tfc = new TFCalculator(input, ids);
 	                System.out.println("vector size = " + tfc.tfWords.size());
-	                for (String s : tfc.tfWords) {
-	                        System.out.println(s);                  
-	                }
-	                System.out.println();
+//	                for (String s : tfc.tfWords) {
+//	                        System.out.println(s);                  
+//	                }
+//	                System.out.println();
 
 	              try {
 	              //[SINGLE|COMPLETE|AVERAGE|MEAN|CENTROID|WARD|ADJCOMLPETE|NEIGHBOR_JOINING]
-	              HClusterer hc = new HClusterer("AVERAGE", 2, 6, 10);
+	              HClusterer hc = new HClusterer(linkageMethod, nClusters, clusterNumLeavesThreshold, clusterDistThreshold);
 	              String jsonHierachy = hc.getJsonHierachy(new ByteArrayInputStream(tfc.getResult().getBytes("UTF-8")));
 	              System.out.println(jsonHierachy);
 	              String result = hc.getClusters(jsonHierachy);
