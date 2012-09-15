@@ -102,14 +102,13 @@ public class TFScore {
 class Doc {
 
 	private String id;
-	private int tops; // size 20
+
 	private String content;
 	private HashMap<String, Double> tfMap; // (word, tf) pair
 
 	private double[] tfVector;
 
-	public Doc(int tops, String id, String content) {
-		this.tops = tops;
+	public Doc(String id, String content) {
 		this.id = id;
 		this.content = content;
 	}
@@ -193,9 +192,15 @@ class TFCalculator {
 		DecimalFormat df = new DecimalFormat("#.###");
 		
 		for (int i = 0; i < docs.length; i++) {
+			System.out.print("{");
+			for (Map.Entry<String, Double> entry: docs[i].getTfMap().entrySet()) {
+				System.out.print(entry.getKey() + "=" + df.format(entry.getValue()) + " ");
+			}
+			System.out.println("}\n");
 			double[] tfVector = docs[i].getTfVector();
 			for (int j = 0; j < tfVector.length; j++) {
-				sb.append(df.format(tfVector[j])).append(", ");
+				String num = (tfVector[j] == 0 ? "0    " : df.format(tfVector[j])); 
+				sb.append(num).append(", ");
 			}
 			sb.append(docs[i].getId());
 			sb.append("\n");
@@ -233,8 +238,8 @@ class DocParser {
 	public static final int TOP = 20;
 
 	public static Doc parse(String docText, String id) {
-		Doc doc = new Doc(TOP, id, docText);
-		String[] words = docText.split("\\s+");
+		Doc doc = new Doc(id, docText);
+		String[] words = docText.toLowerCase().split("\\s+");
 
 		HashMap<String, Double> countMap = new HashMap<String, Double>();
 		for (int i = 0; i < words.length; i++) {
@@ -256,8 +261,7 @@ class DocParser {
 
 		for (Map.Entry<String, Double> entry: sortedMap.entrySet()) {
 			if (count >= TOP) break;
-			topCountMap.put(entry.getKey(), 
-					entry.getValue());
+			topCountMap.put(entry.getKey(), entry.getValue());
 			count++;
 		}
 		long squareSum = 0;

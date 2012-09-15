@@ -30,22 +30,27 @@ public class TFScoreTest {
 				readFile("test_files/4_iphone5.txt"),
 				readFile("test_files/5_iphone5.txt"),
 				readFile("test_files/6_iphone5.txt"),
+				readFile("test_files/1_nasa.txt"),
+				readFile("test_files/2_nasa.txt"),
+				readFile("test_files/3_nasa.txt"),
+				readFile("test_files/4_nasa.txt"),
+				readFile("test_files/5_nasa.txt"),
+				readFile("test_files/1_xijinping.txt"),
+				readFile("test_files/2_xijinping.txt"),
 		};
-		String[] ids = {"romney_1", 
-				"romney_2", 
-				"romney_3", 
-				"romney_4", 
-				"romney_5", 
-				"romney_6",
-				"iphone_1", 
-				"iphone_2", "iphone_3", "iphone_4", "iphone_5", "iphone_6"};		
+		String[] ids = {"romney_1", "romney_2", "romney_3", "romney_4", "romney_5", "romney_6",
+				"iphone_1", "iphone_2", "iphone_3", "iphone_4", "iphone_5", "iphone_6",
+				"nasa_1", "nasa_2", "nasa_3", "nasa_4", "nasa_5",
+				"xijinping_1", "xijinping_2",
+		};		
 
 		TFCalculator tfc = new TFCalculator(input, ids);
-		//System.out.println("vector size = " + tfc.tfWords.size());
+		System.out.println("vector size = " + tfc.tfWords.size());
 		for (String s : tfc.tfWords) {
-			//System.out.print(s + " ");			
+			System.out.println(s);			
 		}
 		System.out.println();
+<<<<<<< HEAD
 		//System.out.println(tfc.getResult());
 		try {
 		    //[SINGLE|COMPLETE|AVERAGE|MEAN|CENTROID|WARD|ADJCOMLPETE|NEIGHBOR_JOINING]
@@ -61,6 +66,11 @@ public class TFScoreTest {
 		} catch (Exception e) {
 		    e.printStackTrace();
 		}
+=======
+		System.out.println();
+		System.out.println(tfc.printResult());
+		
+>>>>>>> update
 	}
 
 	public static String readFile(String path) {

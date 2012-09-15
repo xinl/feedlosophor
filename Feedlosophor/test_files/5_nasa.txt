@@ -1,0 +1,60 @@
+April Flowers for redOrbit.com – Your Universe Online
+
+With the August 30 launch of the Radiation Storm Belt Probes (RSBP), the mission teams at NASA’s Kennedy Space Center and Cape Canaveral Air Force Station celebrated a job well done. The mission specialists at the Johns Hopkins Applied Physics Laboratory (APL) were celebrating too, but for many of them at Mission Operations Center (MOC) the job was just beginning.
+
+The first 60 days after launch are the commissioning phase of operations, where all of the spacecrafts’ systems and instruments are activated, monitored, and made ready for the two-year primary mission.
+
+RBSP will explore space weather — changes in Earth’s space environment caused by the sun — that can disable satellites, create power grid failures, and disrupt GPS service. The mission also will allow researchers to understand fundamental radiation and particle acceleration processes throughout the universe.
+
+Approximately 90 minutes after launch, the RSBP team at the MOC went to work to establish contact with the twin probes, and make sure the spacecraft deployed their solar panels and were receiving power from them.
+
+With all those systems checked out, the RBSP team had a lot more to do on the first day in orbit for the probes. The twin Electric and Magnetic Field Instrument Suite and Integrated Science (EMFISIS) booms were the first instruments to be powered up and deployed. This was done so that the magnetic signatures of the other instruments could be observed as they were powered up. In addition to providing science data for the EMFISIS team, magnetometers on the booms are used by the mission operations team (along with sun sensors) to help determine the attitude of the spacecraft, which in this case is the angle at which they are pointed at the sun.
+
+The RBSP Ion Composition Experiment (RBSPICE) instrument was turned on with low voltage – just enough to power up the Engineering Radiation Monitor (ERM), which keeps track of the amount of radiation entering RBSP.
+
+September 1 saw the first full powering-up of one of the many instruments on the spacecraft. At 3 am EDT, the Relativistic Electron Proton Telescope (REPT) Instrument of the Energetic Particle, Composition, and Thermal Plasma Suite (ECT) aboard spacecraft A was turned on.
+
+The RBSP MOC team counted down: “Three, two, one….”
+
+“Confirm, we’re seeing telemetry,” was the reply from the REPT team.
+
+Usable data immediately began to stream into the MOC. Spacecraft B’s REPT was turned on approximately 12 hours later, giving ECT principal investigator Harlan Spence of the University of New Hampshire and the ECT team live data of the particles in the belts from two spacecraft, never before gathered within the radiation belts.
+
+“We have highly understandable, full science data right out of the box,” says Spence. “The REPT units are performing identically in space as they did on the ground, exceeding our highest expectations and delivering outstanding scientific measurements of the radiation belts. We are on the exciting threshold of discovery.”
+
+That same day, the biggest solar proton event in the past two months occurred, giving researchers exactly the type event they need to study the behavior of the radiation belts.
+
+“There’s been no end to the extreme weather the ECT team and RBSP has attracted,” Spence says, “from the wildfires that affected the area around Los Alamos, to the hurricane that delayed the launch of RBSP, and now to the solar energetic proton storm.”
+
+REPT wasn’t originally slated to be turned on so early, it was supposed to be powered up about 30 days into the mission. That changed when Daniel Baker, REPT Science Lead at the Laboratory for Atmospheric and Space Physics (LASP) at the University of Colorado realized the short remaining lifespan of NASA’s Solar Anomalous and Magnetospheric Particle Explorer (SAMPEX) meant that an important window for RBSP and SAMPEX to share data about the belts, sampled from very different places, was quickly closing.
+
+SAMPEX is the first of NASA’s Small Explorer missions, designed to study the energy, composition and charge states of four classes of charged particles that originate beyond the Earth. The four classes are galactic cosmic rays, anomalous cosmic rays, solar energetic particles, and magnetospheric electrons. SAMPEX observations were able to provide important new information on the cosmic abundances of elements and their isotopes, the composition of local interstellar gas, the solar composition and the mechanisms responsible for solar atmospheric heating, and electron energy injection into the Earth’s upper atmosphere.
+
+REPT measures electrons with energies from 1.5 mega electron volts, or MeV, to more than 20 MeV and protons from 17 MeV to more than 100 MeV. These energies ranges significantly overlap similar measurements being made on SAMPEX.
+
+“I went on a campaign to get REPT turned on much earlier to assure that as much overlap of data as possible could occur,” says Baker. “Everybody involved with RBSP, at NASA and APL and the other institutions saw the wisdom of this, and we got the turn-on time moved up.”
+
+Baker says that the REPT is giving “beautiful data,” and the solar energetic proton storm was a much-appreciated bonus.
+
+“The sun seemed to know what we were up to,” Baker says. “It gave us just the stimulus we were looking for. It couldn’t have been scripted any better.”
+
+The REPT wasn’t the only instrument brought online September 1. The Relativistic Proton Spectrometer (RPS) on spacecraft B was turned on, while its sibling on spacecraft A was powered up on Sunday, Sept. 2.
+
+The spacecraft completed a series of small changes in velocity and adjusted the angle at which they face the sun, known as precession, during the first two weeks of orbit. These were done to optimize the orbit and operation of the spacecraft.
+
+“Things are going very smoothly with the spacecraft,” says Ray Harvey, RBSP mission operations manager. “We’ve also begun to send out preliminary test data for the space weather broadcast from the spacecraft, in the same format as the final broadcast will be, so the partner institutions can verify they are receiving it.”
+
+Wednesday, September 5, the Instrument Data Processing Unit (IDPU) for Electric Field and Waves Suite (EFW) was powered up to prepare for the upcoming deployment of EFW’s four booms (per spacecraft). On September 6, the eight Magnetic Electron Ion Spectrometers (MagEIS, another of ECT’s three instruments) were powered up; each spacecraft has four MagEIS instruments that measure widely different energy ranges.
+
+On September 13, the next major instrument activity began with the EFW boom deployment when both RBSP spacecraft were spun up to seven RPM from their normal five RPM. This prepares the instruments for the change in momentum following the initial deployment of the EFW spin-plane booms. The booms deployed the first four meters on September 14, and will continue deploying a little bit more each day until the full 50 meters is fully out. In roughly the middle of this process, the RBSP MOC team will also send a command to open the door to the aperture on the RBSPICE instrument that will allow it to begin full science operations.
+
+The final RBSP instrument to be powered up will be an ECT instrument: the Helium Oxygen Proton Electron (HOPE) instrument, which will be powered up sometime in mid to late October, after the spacecraft have deployed all their booms and completed their commissioning-phase maneuvers.
+
+RBSP is part of NASA’s Living With a Star Program to explore aspects of the connected sun-Earth system that directly affect life and society. LWS is managed by the agency’s Goddard Space Flight Center in Greenbelt, Md. APL built the RBSP spacecraft and manages the mission for NASA.
+
+Image 2 (below):  The Relativistic Electron Proton Telescope (REPT) instrument of the Energetic Particle, Composition, and Thermal Plasma Suite (ECT) for RBSP spacecraft B, shown prior to installation. Credit: JHU/APL
+
+
+Source: April Flowers for redOrbit.com - Your Universe Online
+
+redOrbit (http://s.tt/1nr33)

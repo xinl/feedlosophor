@@ -1,0 +1,49 @@
+WASHINGTON, Sept. 14, 2012 -- /PRNewswire-USNewswire/ -- NASA has selected eight advanced robotics projects that will enable the agency's future missions while supporting the Obama administration's National Robotics Initiative.
+
+(Logo: http://photos.prnewswire.com/prnh/20081007/38461LOGO)
+
+The projects, ranging from technologies for improving robotic planetary rovers to humanoid robotic systems, will support the development and use of robots for space exploration, as well as by manufacturers and businesses in the United States.
+
+Robots can work beside, or cooperatively, with people to enhance individual human capabilities, performance and safety in space as well as here on Earth. Co-robotics, where robots work cooperatively with people to enhance their individual human capabilities, performance and safety, is a valuable tool for maintaining American leadership in aerospace technology and advanced manufacturing.
+
+"Robonaut, NASA's robotic crewmember aboard the International Space Station, is being tested to perform tasks to assist our astronauts and free them up to do the important scientific research and complex engineering taking place each day on our orbiting national lab," said NASA Chief Technologist Mason Peck at NASA Headquarters in Washington. "Selected through our participation in the National Robotics Initiative, these new projects will support NASA as we plan for our asteroid mission in 2025 and the human exploration of Mars around 2035."
+
+The proposals NASA has selected for development are:
+
+-- "Toward Human Avatar Robots for Co-Exploration of Hazardous Environments," J. Pratt, principal investigator, Florida Institute of Human Machine Cognition, Pensacola
+
+-- "A Novel Powered Leg Prosthesis Simulator for Sensing and Control Development," H. Herr, principal investigator, Massachusetts Institute of Technology, Cambridge
+
+-- "Long-range Prediction of Non-Geometric Terrain Hazards for Reliable Planetary Rover Traverse," R. Whittaker, principal investigator, Carnegie Mellon University, Pittsburgh
+
+-- "Active Skins for Simplified Tactile Feedback in Robotics," S. Bergbreiter, principal investigator, University of Maryland, College Park
+
+-- "Actuators for Safe, Strong and Efficient Humanoid Robots," S. Pekarek, principal investigator, Purdue University
+-- "Whole-body Telemanipulation of the Dreamer Humanoid Robot on Rough Terrains Using Hand Exoskeleton (EXODREAM)," L. Sentis, principal investigator, University of Texas at Austin
+
+-- "Long, Thin Continuum Robots for Space Applications," I. Walker, principal investigator, Clemson University, Clemson, S.C.
+
+-- "Manipulating Flexible Materials Using Sparse Coding," R. Platt, principal investigator, State University of New York, Buffalo
+
+The National Science Foundation (NSF) managed the solicitation and peer review selection process for these NASA awards. Awards range from $150,000 to $1 million, with a total NASA investment of $2.7 million.
+
+NASA has a long history of developing cutting-edge robotic systems for use in space exploration. NASA also partners with American businesses, universities and other federal agencies to transfer those technologies back into the nation's industrial base, improving manufacturing capabilities and economic competitiveness.
+
+Recently, tremendous advances in robotics technology have enabled a new generation of assistive systems and devices in industries as diverse as manufacturing, logistics, medicine, health care, military, agriculture, and consumer products.
+As part of the National Robotics Initiative, NSF, NASA, the National Institutes of Health and the U.S. Department of Agriculture have managed a joint solicitation, seeking to engage our next generation of roboticists for the new global technology economy. All participating federal agencies are working with partners to foster the exchange of ideas and technologies that will directly benefit Americans today and well into the future.
+
+The purpose of the initiative is to encourage innovative collaborative research that combines computer and systems science with mechanical, electrical and materials engineering and social, behavioral and economic sciences. The resulting research will tackle the most important and challenging problems in producing this class of human-assisting co-robotics.
+
+NASA's Office of the Chief Technologist and the Space Technology Program lead the agency's participation in the National Robotics Initiative. NASA's Space Technology Program is dedicated to innovating, developing, testing, and flying hardware for use in NASA's future science and exploration missions. NASA's technology investments provide cutting-edge solutions for our nation's future.
+
+For more information about NASA's participation in the National Robotics Initiative, visit:
+
+http://www.nasa.gov/robotics
+
+For more information about NASA, visit:
+
+http://www.nasa.gov
+
+SOURCE NASA
+
+Read more here: http://www.sacbee.com/2012/09/14/4820273/nasa-selects-advanced-robotics.html#storylink=cpy
