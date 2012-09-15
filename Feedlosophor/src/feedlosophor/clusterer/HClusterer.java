@@ -206,8 +206,6 @@ public class HClusterer {
                 "\n" + 
                 "";
         try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
             HClusterer hc = new HClusterer("WARD", 1, 5, 100);
             String jsonHierachy = hc.getJsonHierachy(new ByteArrayInputStream(rawData.getBytes("UTF-8")));
             System.out.println(jsonHierachy);
@@ -217,11 +215,27 @@ public class HClusterer {
             System.out.println(jsonResult.length() + " clusters:");
             for (int i = 0; i < jsonResult.length(); ++i)
                 System.out.println(jsonResult.get(i));
-
+            
+            
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        
+//        try {
+//            //[SINGLE|COMPLETE|AVERAGE|MEAN|CENTROID|WARD|ADJCOMLPETE|NEIGHBOR_JOINING]
+//            HClusterer hc = new HClusterer("AVERAGE", 2, 6, 5.5);
+//            String jsonHierachy = hc.getJsonHierachy(new ByteArrayInputStream(tfc.getResult().getBytes("UTF-8")));
+//            System.out.println(jsonHierachy);
+//            String result = hc.getClusters(jsonHierachy);
+//            System.out.println(result);
+//            JSONArray jsonResult = new JSONArray(result);
+//            System.out.println(jsonResult.length() + " clusters:");
+//            for (int i = 0; i < jsonResult.length(); ++i)
+//                System.out.println(jsonResult.get(i));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
     }
 

@@ -50,27 +50,10 @@ public class TFScoreTest {
 			System.out.println(s);			
 		}
 		System.out.println();
-<<<<<<< HEAD
-		//System.out.println(tfc.getResult());
-		try {
-		    //[SINGLE|COMPLETE|AVERAGE|MEAN|CENTROID|WARD|ADJCOMLPETE|NEIGHBOR_JOINING]
-	            HClusterer hc = new HClusterer("AVERAGE", 1, 6, 5.6);
-	            String jsonHierachy = hc.getJsonHierachy(new ByteArrayInputStream(tfc.getResult().getBytes("UTF-8")));
-	            System.out.println(jsonHierachy);
-	            String result = hc.getClusters(jsonHierachy);
-	            System.out.println(result);
-	            JSONArray jsonResult = new JSONArray(result);
-	            System.out.println(jsonResult.length() + " clusters:");
-	            for (int i = 0; i < jsonResult.length(); ++i)
-	                System.out.println(jsonResult.get(i));
-		} catch (Exception e) {
-		    e.printStackTrace();
-		}
-=======
+
 		System.out.println();
 		System.out.println(tfc.printResult());
 		
->>>>>>> update
 	}
 
 	public static String readFile(String path) {
