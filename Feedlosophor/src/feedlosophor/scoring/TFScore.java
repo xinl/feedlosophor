@@ -16,12 +16,13 @@ public class TFScore {
 
 	private Doc[] docs;
 
-	public TFScore(String[] contents, String[] titles, String[] ids) {
-
+	public TFScore(String[] contents, String[] titles, String[] ids, boolean enableStemming) {
 		// 1. parse each document
 		this.docs = new Doc[contents.length];
 		for (int i = 0; i < contents.length; i++) {
-			docs[i] = DocParser.parse(contents[i], titles[i], ids[i]);			
+			String content = contents[i];
+			if (enableStemming) content = StemmingTest.Stemming(content);
+			docs[i] = DocParser.parse(content, titles[i], ids[i]);			
 		}
 
 		// 2. build complete word list
@@ -52,11 +53,19 @@ public class TFScore {
 
 	}
 
+	public TFScore(String[] contents, String[] titles, String[] ids) {
 
+
+		this(contents, titles, ids, false);
+
+
+	}
+
+	// only for testing purpose
 	public String printResult() {
 		StringBuilder sb = new StringBuilder();
 		DecimalFormat df = new DecimalFormat("#.###");
-		
+
 		for (int i = 0; i < docs.length; i++) {
 			System.out.print("{");
 			for (Map.Entry<String, Double> entry: docs[i].getTfMap().entrySet()) {
@@ -72,13 +81,14 @@ public class TFScore {
 			sb.append("\n");
 		}
 		return sb.toString();
-		
+
 	}
+
 	// output
 	// result for un-supervised learning
 	public String getResult() {
 		StringBuilder sb = new StringBuilder();
-		
+
 		sb.append("@relation fake\n");
 		for (int i = 1; i <= tfWords.size(); i++) {
 			sb.append("@attribute " + i + " numeric\n");			
@@ -203,7 +213,7 @@ class DocParser {
 			topCountMap.put(entry.getKey(), value);
 			//System.out.println(entry.getKey() + ":" + value);
 		}
-		
+
 
 		doc.setTfMap(topCountMap);
 
@@ -221,7 +231,7 @@ class DocParser {
 
 
 	private final static Set<String> STOPLIST = new HashSet<String>();
-	
+
 	static {
 		STOPLIST.add("a");
 		STOPLIST.add("a\'s");
@@ -807,7 +817,7 @@ class ValueComparator implements Comparator<String> {
 	ValueComparator(HashMap<String, Double> map) {
 		this.map = map;
 	}
-	
+
 	// decending order
 	@Override
 	public int compare(String s1, String s2) {

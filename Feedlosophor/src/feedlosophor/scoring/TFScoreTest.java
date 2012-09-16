@@ -53,13 +53,12 @@ public class TFScoreTest {
 				"NASA space star", "NASA space star", "NASA space star", "NASA space star", "NASA space star",
 				"Xi Jinping Vice President", "Xi Jinping Vice President"};
 		
-		TFScore tfc = new TFScore(input, titles, ids);
-		System.out.println("vector size = " + tfc.tfWords.size());
+		TFScore tfc = new TFScore(input, titles, ids, true);
+		System.out.println("vector size = " + tfc.tfWords.size() + "\n");
 		for (String s : tfc.tfWords) {
 			System.out.println(s);			
 		}
 		System.out.println();
-
 		System.out.println();
 		System.out.println(tfc.printResult());
 		
