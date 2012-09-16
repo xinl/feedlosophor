@@ -45,7 +45,7 @@ public class OauthVeriServlet extends HttpServlet {
 			return;
 		}
 		
-		resp.getWriter().println(FeedReader.getFeeds(access_token, 2));
+		resp.getWriter().println(FeedReader.getFeeds(access_token, 5));
 //		FeedReader reader = FeedReader.getUnreadFeeds(access_token);
 //		resp.getWriter().println(access_token);
 	}
