@@ -44,7 +44,8 @@ public class TFScoreTest {
 				"xijinping_1", "xijinping_2"
 		};		
 
-		TFScore tfc = new TFScore(input, ids);
+		String[] titles = {};
+		TFScore tfc = new TFScore(input, titles, ids);
 		System.out.println("vector size = " + tfc.tfWords.size());
 		for (String s : tfc.tfWords) {
 			System.out.println(s);			

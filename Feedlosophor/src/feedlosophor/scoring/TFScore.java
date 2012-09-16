@@ -16,12 +16,12 @@ public class TFScore {
 
 	private Doc[] docs;
 
-	public TFScore(String[] input, String[] ids) {
+	public TFScore(String[] contents, String[] titles, String[] ids) {
 
 		// 1. parse each document
-		this.docs = new Doc[input.length];
-		for (int i = 0; i < input.length; i++) {
-			docs[i] = DocParser.parse(input[i], ids[i]);			
+		this.docs = new Doc[contents.length];
+		for (int i = 0; i < contents.length; i++) {
+			docs[i] = DocParser.parse(contents[i], ids[i]);			
 		}
 
 		// 2. build complete word list
