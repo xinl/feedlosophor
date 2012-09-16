@@ -55,9 +55,7 @@ public class TFScore {
 
 	public TFScore(String[] contents, String[] titles, String[] ids) {
 
-
 		this(contents, titles, ids, false);
-
 
 	}
 

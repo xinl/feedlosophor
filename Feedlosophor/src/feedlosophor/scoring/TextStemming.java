@@ -13,6 +13,7 @@ import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 
 
+
 public class TextStemming {
 
 	public static void main(String[] args) {
@@ -87,5 +88,6 @@ class PositionalPorterStopAnalyzer extends Analyzer {
 
 
 }
+
 
 
