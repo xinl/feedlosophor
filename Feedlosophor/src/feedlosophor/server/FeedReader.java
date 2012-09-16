@@ -33,7 +33,7 @@ public class FeedReader {
 	private String jsonUnreadLabelCount;
 	private String jsonUnreadStreamCount;
 	private static String feeds;
-	private static HashMap<String, String[]> feedList;
+	private static HashMap<String, ArrayList<String[]>> feedList;
 	
 	/*
 	public FeedReader(String token) {
@@ -44,6 +44,7 @@ public class FeedReader {
 	}
 	*/
 	
+	/*
 	public List<String> getIds() {
 		return ids;
 	}
@@ -55,6 +56,7 @@ public class FeedReader {
 	public List<String> getContents() {
 		return contents;
 	}
+	*/
 	
 	public static FeedReader getUnreadFeedsByLabel(String token, String label) {
 		return null;
@@ -159,13 +161,18 @@ public class FeedReader {
 			return null;
 		}
 		
-		feedList = new HashMap<String, ArrayList<String>>();
+		feedList = new HashMap<String, ArrayList<String[]>>();
 		url = "https://www.google.com/reader/api/0/stream/contents/?access_token=" + token + 
 				"&xt=user/-/state/com.google/read";
 		if (maxCount > 0) {
 			url += "&n=" + maxCount;
 		}
 		response = OauthVeriServlet.HttpConnect("GET", url, null); 
+		String accountId;
+		String streamId;
+		String feedTitle;
+		String feedId;
+		JSONArray ja2 = null;
 		
 		try {
 			jsonWriter = jsonWriter.key("entryBank").object();
@@ -175,10 +182,23 @@ public class FeedReader {
 		}
 		try {
 			jo = new JSONObject(response);
+			accountId = jo.getString("id");
+			ArrayList<String[]> arrList = new ArrayList<String[]>();
+			feedList.put(accountId, arrList);
 			ja = jo.getJSONArray("items");
 			for (int i = 0; i < ja.length(); i++) {
 				jsonWriter = jsonWriter.key(ja.getJSONObject(i).getString("id"));
 				jsonWriter = jsonWriter.value(ja.getString(i));
+				
+				jo = ja.getJSONObject(i);
+				feedId = jo.getString("id");
+				streamId = jo.getJSONObject("origin").getString("streamId");
+				feedTitle = jo.getJSONObject("origin").getString("title");
+				ja2 = jo.getJSONArray("categories");
+				for (int j = 0; j < ja2.length(); j++) {
+					if (ja2.getString(i).contains("label")) {
+					}
+				}
 			}
 			jsonWriter = jsonWriter.endObject();
 		} catch (JSONException e) {
