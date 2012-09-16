@@ -105,7 +105,9 @@ public class TFScore {
 			for (int j = 0; j < tfVector.length; j++) {
 				sb.append(tfVector[j]).append(", ");
 			}
-			sb.append(docs[i].getId());
+			String id = docs[i].getId();
+			id = id.replaceAll(",", "_comma_");
+			sb.append(id);
 			sb.append("\n");
 		}
 		return sb.toString();

@@ -66,9 +66,14 @@ public class HClusterer {
         //System.out.println(hc.getNumClusters());
         hc.setLinkType(new SelectedTag(linkageMethod, HierarchicalClusterer.TAGS_LINK_TYPE));
         hc.setPrintNewick(true);
+        System.out.println(data);
+        System.out.println("Data instances: " +data.numInstances());
+        if (data.numInstances() < 1) {
+        	return "[]";
+        }
         hc.buildClusterer(data);
         String result = hc.jsonGraph();
-        return result;
+        return result.replaceAll("_comma_", ",");
     }
 
     /**
