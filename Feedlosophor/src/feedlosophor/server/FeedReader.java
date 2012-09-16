@@ -136,7 +136,8 @@ public class FeedReader {
 			ja = jo.getJSONArray("items");
 			for (int i = 0; i < ja.length(); i++) {
 				jsonWriter = jsonWriter.key(ja.getJSONObject(i).getString("id"));
-				jsonWriter = jsonWriter.value(ja.getString(i));
+//				jsonWriter = jsonWriter.value(ja.getString(i));
+				jsonWriter = jsonWriter.value(ja.getJSONObject(i));
 				
 				jo = ja.getJSONObject(i);
 				feedId = jo.getString("id");
@@ -155,7 +156,7 @@ public class FeedReader {
 				
 				feedLabel = null;
 				for (int j = 0; j < ja2.length(); j++) {
-					feedLabel = ja2.getString(i);
+					feedLabel = ja2.getString(j);
 					if (!feedLabel.contains("label")) {
 						feedLabel = null;
 					}
@@ -170,11 +171,6 @@ public class FeedReader {
 			return null;
 		}
 		
-		try {
-			feeds = jsonWriter.endObject().toString();
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
 		
 		ArrayList<FeedReader> requests = new ArrayList<FeedReader>();
 		ArrayList<JSONArray> hierachies = new ArrayList<JSONArray>();
@@ -209,6 +205,7 @@ public class FeedReader {
                   for (int i = 0; i < hierachies.get(0).length(); ++i)
                       System.out.println(hierachies.get(0).get(i));
                   
+                  
 		} catch (Exception e) {
 		    e.printStackTrace();
 		}
@@ -242,9 +239,11 @@ public class FeedReader {
 				jsonWriter = jsonWriter.key(id).object();
 				jsonWriter = jsonWriter.key("title").value(titles.get(id));
 				jsonWriter = jsonWriter.key("unread").value(jo.getString("count"));
+				System.out.println("ID: " + id);
 				for (int k = 0; k < requests.size(); k++) {
-					if (requests.get(k).topic.equals(titles.get(id))) {
-						jsonWriter = jsonWriter.key("groups").value(hierachies.get(k).toString());
+					System.out.println("Possible Topic: " + requests.get(k).topic);
+					if (requests.get(k).topic.equals(id)) {
+						jsonWriter = jsonWriter.key("groups").value(hierachies.get(k));
 					}
 				}
 				jsonWriter = jsonWriter.endObject();
@@ -260,6 +259,11 @@ public class FeedReader {
 			return null;
 		}
 		
+		try {
+			feeds = jsonWriter.endObject().toString();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 //		resp.getWriter().println(access_token);
 		return feeds;
 	}
