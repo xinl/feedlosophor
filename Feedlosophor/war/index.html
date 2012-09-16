@@ -425,7 +425,7 @@
 			function renderEntryList(id) {
 				FL["currentFeed"] = id;
 				console.debug("Rendering entry list for " + id);
-				$("#feed-dropdown #current-feed-name").text(FL['feedList'][id].title);
+				$("#feed-dropdown #current-feed-name").text((FL['feedList'][id].title) ? FL['feedList'][id].title : "All items" );
 				$("#feed-dropdown #current-feed-unread").text(FL['feedList'][id].unread);
 
 				var data = FL['feedList'][id].groups;
