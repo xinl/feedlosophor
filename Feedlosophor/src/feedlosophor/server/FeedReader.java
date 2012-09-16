@@ -29,11 +29,8 @@ public class FeedReader {
 	private List<String> titleList;
 	private List<String> idList;
 	private List<String> contentList;
-	private String jsonUnreadCount;
-	private String jsonUnreadLabelCount;
-	private String jsonUnreadStreamCount;
 	private static String feeds;
-	private static HashMap<String, ArrayList<String[]>> feedList;
+	private static HashMap<String, ArrayList<ArrayList<String>>> feedList;
 	
 	/*
 	public FeedReader(String token) {
@@ -113,7 +110,7 @@ public class FeedReader {
 		return titles;
 	}
 	
-	public static String getFeeds(String token, int maxCount) {
+	public static HashMap<String, ArrayList<ArrayList<String>>> getFeeds(String token, int maxCount) {
 		HashMap<String, String> titles = getTitles(token);
 		
 		String url = "https://www.google.com/reader/api/0/unread-count?output=json&access_token=" + token;
@@ -161,7 +158,7 @@ public class FeedReader {
 			return null;
 		}
 		
-		feedList = new HashMap<String, ArrayList<String[]>>();
+		feedList = new HashMap<String, ArrayList<ArrayList<String>>>();
 		url = "https://www.google.com/reader/api/0/stream/contents/?access_token=" + token + 
 				"&xt=user/-/state/com.google/read";
 		if (maxCount > 0) {
@@ -172,6 +169,8 @@ public class FeedReader {
 		String streamId;
 		String feedTitle;
 		String feedId;
+		String feedLabel;
+		String feedContent;
 		JSONArray ja2 = null;
 		
 		try {
@@ -183,7 +182,7 @@ public class FeedReader {
 		try {
 			jo = new JSONObject(response);
 			accountId = jo.getString("id");
-			ArrayList<String[]> arrList = new ArrayList<String[]>();
+			ArrayList<ArrayList<String>> arrList = new ArrayList<ArrayList<String>>();
 			feedList.put(accountId, arrList);
 			ja = jo.getJSONArray("items");
 			for (int i = 0; i < ja.length(); i++) {
@@ -195,8 +194,24 @@ public class FeedReader {
 				streamId = jo.getJSONObject("origin").getString("streamId");
 				feedTitle = jo.getJSONObject("origin").getString("title");
 				ja2 = jo.getJSONArray("categories");
+				if (jo.has("summary")) {
+					feedContent = jo.getJSONObject("summary").getString("content");
+				}
+				else {
+					feedContent = jo.getJSONObject("content").getString("content");
+				}
+				
+				PutInfo(accountId, feedId, feedTitle, feedContent);
+				PutInfo(streamId, feedId, feedTitle, feedContent);
+				
+				feedLabel = null;
 				for (int j = 0; j < ja2.length(); j++) {
-					if (ja2.getString(i).contains("label")) {
+					feedLabel = ja2.getString(i);
+					if (!feedLabel.contains("label")) {
+						feedLabel = null;
+					}
+					else {
+						PutInfo(feedLabel, feedId, feedTitle, feedContent);
 					}
 				}
 			}
@@ -211,7 +226,26 @@ public class FeedReader {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		return feeds;
+		return feedList;
 	}
 	
+	public static void PutInfo(String id, String feedId, String feedTitle, String feedContent) {
+		ArrayList<ArrayList<String>> allList = null;
+		allList = feedList.get(id);
+		if (allList == null) {
+			allList = new ArrayList<ArrayList<String>>(); 
+			feedList.put(id, allList);
+		}
+		if (allList.size() == 0) {
+			ArrayList<String> lids = new ArrayList<String>();
+			ArrayList<String> ltitles = new ArrayList<String>();
+			ArrayList<String> lcontents = new ArrayList<String>();
+			allList.add(lids);
+			allList.add(ltitles);
+			allList.add(lcontents);
+		}
+		allList.get(0).add(feedId);
+		allList.get(1).add(feedTitle);
+		allList.get(2).add(feedContent);
+	}
 }
