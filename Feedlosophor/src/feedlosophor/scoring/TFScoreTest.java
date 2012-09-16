@@ -109,8 +109,12 @@ public class TFScoreTest {
 	                                "nasa_1", "nasa_2", "nasa_3", "nasa_4", "nasa_5",
 	                                "xijinping_1", "xijinping_2"
 	                };              
-
-	                TFScore tfc = new TFScore(input, ids);
+                        String[] titles = {"romney_1", "romney_2", "romney_3", "romney_4", "romney_5", "romney_6",
+                                "iphone_1", "iphone_2", "iphone_3", "iphone_4", "iphone_5", "iphone_6",
+                                "nasa_1", "nasa_2", "nasa_3", "nasa_4", "nasa_5",
+                                "xijinping_1", "xijinping_2"
+                };  
+	                TFScore tfc = new TFScore(input,titles, ids);
 	                System.out.println("vector size = " + tfc.tfWords.size());
 //	                for (String s : tfc.tfWords) {
 //	                        System.out.println(s);                  
