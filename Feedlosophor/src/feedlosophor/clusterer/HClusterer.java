@@ -219,7 +219,7 @@ public class HClusterer {
             e.printStackTrace();
         }
         
-        TFScoreTest.TestCluster("AVERAGE", 1, 5, 6);
+        TFScoreTest.TestCluster("COMPLETE", 1, 6, 7);
 
     }
 

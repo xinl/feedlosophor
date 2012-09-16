@@ -23,19 +23,15 @@ public class FeedHierachyFactory {
 
     private ExecutorService es = Executors.newCachedThreadPool();
 
+    public FeedHierachyFactory() {
+    }
+
     /**
-     * Constructor (similar for HClusterer)
      * [SINGLE|COMPLETE|AVERAGE|MEAN|CENTROID|WARD|ADJCOMLPETE|NEIGHBOR_JOINING]
      * @param linkageMethod: see weka's <code>HierarchicalClusterer.TAGS_LINK_TYPE</code>
      * @param nClusters: number of clusters at the top level of hierarchy
      * @param clusterNumLeavesThreshold: maximum number of leaves per flattened cluster
      * @param clusterDistThreshold: minimum distance between two clusters considered different.
-     */
-    public FeedHierachyFactory() {
-    }
-
-    /**
-     * 
      */
     public Future<JSONArray> submitHierarchyRequest(String[] texts, String[] titles, String[] ids,
             String linkageMethod, int nClusters, int clusterNumLeavesThreshold, double clusterDistThreshold) {
@@ -48,6 +44,10 @@ public class FeedHierachyFactory {
         es = Executors.newCachedThreadPool();
     }
 
+    public void shutDown() {
+        es.shutdown();
+    }
+    
     public static void main(String[] args) {
         FeedHierachyFactory fhf = new FeedHierachyFactory();
         ArrayList<FeedReader> requests = new ArrayList<FeedReader>();
