@@ -21,7 +21,7 @@ public class TFScore {
 		// 1. parse each document
 		this.docs = new Doc[contents.length];
 		for (int i = 0; i < contents.length; i++) {
-			docs[i] = DocParser.parse(contents[i], ids[i]);			
+			docs[i] = DocParser.parse(contents[i], titles[i], ids[i]);			
 		}
 
 		// 2. build complete word list
@@ -152,11 +152,23 @@ class DocParser {
 
 	public static final int TOP = 20;
 
-	public static Doc parse(String docText, String id) {
+	public static Doc parse(String docText, String title, String id) {
 		Doc doc = new Doc(id, docText);
 		String[] words = docText.toLowerCase().split("\\s+");
+		String[] titles = title.toLowerCase().split("\\s+");
 
 		HashMap<String, Double> countMap = new HashMap<String, Double>();
+		for (int i = 0; i < titles.length; i++) {
+			if (filterWord(titles[i])) {
+				if (countMap.containsKey(words[i])) {
+					// title words has higher weight than normal text
+					countMap.put(words[i], countMap.get(words[i]) + 2);
+				} else {
+					// title words has higher weight than normal text
+					countMap.put(words[i], 3.0);
+				}
+			}		
+		}
 		for (int i = 0; i < words.length; i++) {
 			if (filterWord(words[i])) {
 				if (countMap.containsKey(words[i])) {
@@ -166,6 +178,7 @@ class DocParser {
 				}			
 			}
 		}
+
 		ValueComparator comparator = new ValueComparator(countMap);
 		TreeMap<String, Double> sortedMap = new TreeMap<String, Double>(comparator);
 		sortedMap.putAll(countMap);

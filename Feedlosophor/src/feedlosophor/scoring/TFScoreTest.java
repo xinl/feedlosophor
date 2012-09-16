@@ -44,7 +44,11 @@ public class TFScoreTest {
 				"xijinping_1", "xijinping_2"
 		};		
 
-		String[] titles = {};
+		String[] titles = {"Mitt Romney", "Mitt Romney", "Mitt Romney", "Mitt Romney", "Mitt Romney","Mitt Romney",
+				"iphone5 Apple", "iphone5 Apple", "iphone5 Apple", "iphone5 Apple", "iphone5 Apple", "iphone5 Apple", 
+				"NASA space star", "NASA space star", "NASA space star", "NASA space star", "NASA space star",
+				"Xi Jinping Vice President", "Xi Jinping Vice President"};
+		
 		TFScore tfc = new TFScore(input, titles, ids);
 		System.out.println("vector size = " + tfc.tfWords.size());
 		for (String s : tfc.tfWords) {
