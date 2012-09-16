@@ -58,9 +58,15 @@ public class TFScore {
 		DecimalFormat df = new DecimalFormat("#.###");
 		
 		for (int i = 0; i < docs.length; i++) {
+			System.out.print("{");
+			for (Map.Entry<String, Double> entry: docs[i].getTfMap().entrySet()) {
+				System.out.print(entry.getKey() + "=" + df.format(entry.getValue()) + " ");
+			}
+			System.out.println("}\n");
 			double[] tfVector = docs[i].getTfVector();
 			for (int j = 0; j < tfVector.length; j++) {
-				sb.append(df.format(tfVector[j])).append(", ");
+				String num = (tfVector[j] == 0 ? "0    " : df.format(tfVector[j])); 
+				sb.append(num).append(", ");
 			}
 			sb.append(docs[i].getId());
 			sb.append("\n");
@@ -68,8 +74,7 @@ public class TFScore {
 		return sb.toString();
 		
 	}
-	
-	// output for Ruogu Hu
+	// output
 	// result for un-supervised learning
 	public String getResult() {
 		StringBuilder sb = new StringBuilder();
@@ -91,8 +96,6 @@ public class TFScore {
 		}
 		return sb.toString();
 	}
-
-
 
 
 }
@@ -144,94 +147,6 @@ class Doc {
 
 }
 
-class TFCalculator {
-
-	public ArrayList<String> tfWords; // complete word list, features
-
-	private Doc[] docs;
-
-	public TFCalculator(String[] input, String[] ids) {
-
-		// 1. parse each document
-		this.docs = new Doc[input.length];
-		for (int i = 0; i < input.length; i++) {
-			docs[i] = DocParser.parse(input[i], ids[i]);			
-		}
-
-		// 2. build complete word list
-		tfWords = new ArrayList<String>();
-		HashMap<String, Double> map;
-		for (int i = 0; i < docs.length; i++) {
-			map = docs[i].getTfMap();
-			for (Map.Entry<String, Double> entry: map.entrySet()) {
-				if (!tfWords.contains(entry.getKey())) {
-					tfWords.add(entry.getKey()); // add to complete word list
-
-				}
-			}
-		}
-
-		// 3. build TF vector for each document from complete word list
-		for (int i = 0; i < docs.length; i++) {			
-			double[] tfVector = new double[tfWords.size()];
-			for (int j = 0; j < tfWords.size(); j++) {
-				if (docs[i].getTfMap().containsKey(tfWords.get(j))) {
-					tfVector[j] = docs[i].getTfMap().get(tfWords.get(j));					
-				} else {
-					tfVector[j] = 0;
-				}			
-			}
-			docs[i].setTfVector(tfVector);
-		}
-
-	}
-
-
-	public String printResult() {
-		StringBuilder sb = new StringBuilder();
-		DecimalFormat df = new DecimalFormat("#.###");
-		
-		for (int i = 0; i < docs.length; i++) {
-			System.out.print("{");
-			for (Map.Entry<String, Double> entry: docs[i].getTfMap().entrySet()) {
-				System.out.print(entry.getKey() + "=" + df.format(entry.getValue()) + " ");
-			}
-			System.out.println("}\n");
-			double[] tfVector = docs[i].getTfVector();
-			for (int j = 0; j < tfVector.length; j++) {
-				String num = (tfVector[j] == 0 ? "0    " : df.format(tfVector[j])); 
-				sb.append(num).append(", ");
-			}
-			sb.append(docs[i].getId());
-			sb.append("\n");
-		}
-		return sb.toString();
-		
-	}
-	// output
-	// result for un-supervised learning
-	public String getResult() {
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append("@relation fake\n");
-		for (int i = 1; i <= tfWords.size(); i++) {
-			sb.append("@attribute " + i + " numeric\n");			
-		}
-		sb.append("@attribute " + (tfWords.size() + 1) + " string\n");
-		sb.append("\n");
-		sb.append("@data\n");
-		for (int i = 0; i < docs.length; i++) {
-			double[] tfVector = docs[i].getTfVector();
-			for (int j = 0; j < tfVector.length; j++) {
-				sb.append(tfVector[j]).append(", ");
-			}
-			sb.append(docs[i].getId());
-			sb.append("\n");
-		}
-		return sb.toString();
-	}
-
-}
 
 class DocParser {
 

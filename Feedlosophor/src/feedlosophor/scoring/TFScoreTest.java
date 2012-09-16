@@ -44,7 +44,7 @@ public class TFScoreTest {
 				"xijinping_1", "xijinping_2"
 		};		
 
-		TFCalculator tfc = new TFCalculator(input, ids);
+		TFScore tfc = new TFScore(input, ids);
 		System.out.println("vector size = " + tfc.tfWords.size());
 		for (String s : tfc.tfWords) {
 			System.out.println(s);			
@@ -109,7 +109,7 @@ public class TFScoreTest {
 	                                "xijinping_1", "xijinping_2"
 	                };              
 
-	                TFCalculator tfc = new TFCalculator(input, ids);
+	                TFScore tfc = new TFScore(input, ids);
 	                System.out.println("vector size = " + tfc.tfWords.size());
 //	                for (String s : tfc.tfWords) {
 //	                        System.out.println(s);                  
