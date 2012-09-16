@@ -79,12 +79,125 @@ public class HClusterer {
      * @throws Exception
      */
     public String getClusters(String jsonHierachy) throws JSONException {
+//        JSONArray tree = new JSONArray(jsonHierachy);
+//        JSONArray flattened = new JSONArray();
+//        collapse(tree, flattened);
+//        System.out.println("collpased tree: " + tree);
+//        return flattened.toString();
         JSONArray tree = new JSONArray(jsonHierachy);
         JSONArray flattened = new JSONArray();
-        collapse(tree, flattened);
+        JSONArray dummy = new JSONArray();
+        System.out.println("original tree: " + tree);
+        aggregateDupe(tree, dummy);
+        System.out.println("removed dupes tree1: " + tree);
+        collapseTree(tree, dummy);
+        System.out.println("removed dupes tree2: " + tree);
+        convertTreeToList(tree, flattened);
+        System.out.println("flattened groups: " + flattened);
         return flattened.toString();
     }
 
+    private void aggregateDupe(JSONArray tree, JSONArray flattened) throws JSONException {
+        double dist = tree.getDouble(1);
+        List<JSONObject> leaves = new ArrayList<JSONObject>();
+        if (dist == -1 || dist > clusterDistThreshold) {
+            if (tree.get(2) instanceof JSONArray) {
+                aggregateDupe((JSONArray) ((JSONArray) tree).get(2), flattened);
+            } else {
+                flattened.put((JSONObject)tree.get(2));
+            }
+            if (tree.get(3) instanceof JSONArray) {
+                aggregateDupe((JSONArray) ((JSONArray) tree).get(3), flattened);
+            } else {
+                flattened.put((JSONObject)tree.get(3));
+            }
+        } else {
+            if (tree.get(2) instanceof JSONArray) {
+                getAllLeaves((JSONArray)((JSONArray) tree).get(2), leaves);
+            } else leaves.add((JSONObject)tree.get(2));
+            if (tree.get(3) instanceof JSONArray) {
+                getAllLeaves((JSONArray)((JSONArray) tree).get(3), leaves);
+            } else leaves.add((JSONObject)tree.get(3));
+            JSONObject dupes = new JSONObject();
+            dupes.put("dupes", leaves);
+            tree.put(3, dupes);
+            JSONObject best = leaves.get(0);
+            tree.put(2, best);
+            JSONObject cluster = new JSONObject();
+            leaves.remove(0);
+            cluster.put("id", best.get("id"));
+            cluster.put("dupes", leaves);
+            flattened.put(cluster);
+            tree.put(0, -1);
+            }
+    }
+    
+    private void collapseTree(JSONArray tree, JSONArray flattened) throws JSONException {
+//        List<JSONObject> leaves = new ArrayList<JSONObject>();
+//        if (nLeaves > clusterNumLeavesThreshold) {
+            if (tree.get(2) instanceof JSONArray) {
+                if (((JSONArray) tree.get(2)).getInt(0) == -1) {
+                    JSONObject dupe = new JSONObject();
+                    dupe.put("id", ((JSONArray)tree.get(2)).getJSONObject(2).get("id"));
+                    dupe.put("dupes", ((JSONArray)tree.get(2)).getJSONObject(3).get("dupes"));
+                    tree.put(2, dupe);
+                } else collapseTree((JSONArray) ((JSONArray) tree).get(2), flattened);
+            } 
+            if (tree.get(3) instanceof JSONArray) {
+                if (((JSONArray) tree.get(3)).getInt(0) == -1) {
+                    JSONObject dupe = new JSONObject();
+                    dupe.put("id", ((JSONArray)tree.get(3)).getJSONObject(2).get("id"));
+                    dupe.put("dupes", ((JSONArray)tree.get(3)).getJSONObject(3).get("dupes"));
+                    tree.put(3, dupe);
+                } else collapseTree((JSONArray) ((JSONArray) tree).get(3), flattened);
+            }
+//        } 
+//        else {
+//            ArrayList<JSONObject> clusterleaves = new ArrayList<JSONObject>();
+//            if (tree.get(2) instanceof JSONArray) {
+//                getAllLeaves((JSONArray)((JSONArray) tree).get(2), clusterleaves);
+//            } else leaves.add((JSONObject)tree.get(2));
+//            if (tree.get(3) instanceof JSONArray) {
+//                getAllLeaves((JSONArray)((JSONArray) tree).get(3), clusterleaves);
+//            } else leaves.add((JSONObject)tree.get(3));
+//            JSONArray group = new JSONArray();
+//            for (JSONObject jso : clusterleaves) group.put(jso);
+//            flattened.put(group);
+//        }
+    }
+    
+    private void convertTreeToList(JSONArray tree, JSONArray flattened) throws JSONException {
+        int nLeaves = tree.getInt(0);
+        List<JSONObject> leaves = new ArrayList<JSONObject>();
+        if (nLeaves > clusterNumLeavesThreshold) {
+            if (tree.get(2) instanceof JSONArray) {
+                convertTreeToList((JSONArray) ((JSONArray) tree).get(2), flattened);
+            } else {
+                JSONArray cluster = new JSONArray();
+                cluster.put(tree.get(2));
+                flattened.put(cluster);
+            }
+            if (tree.get(3) instanceof JSONArray) {
+                convertTreeToList((JSONArray) ((JSONArray) tree).get(3), flattened);
+            }  else {
+                JSONArray cluster = new JSONArray();
+                cluster.put(tree.get(3));
+                flattened.put(cluster);
+            }
+        } else {
+            ArrayList<JSONObject> clusterleaves = new ArrayList<JSONObject>();
+            if (tree.get(2) instanceof JSONArray) {
+                getAllLeaves((JSONArray)((JSONArray) tree).get(2), clusterleaves);
+            } else leaves.add((JSONObject)tree.get(2));
+            if (tree.get(3) instanceof JSONArray) {
+                getAllLeaves((JSONArray)((JSONArray) tree).get(3), clusterleaves);
+            } else leaves.add((JSONObject)tree.get(3));
+            JSONArray group = new JSONArray();
+            for (JSONObject jso : clusterleaves) group.put(jso);
+            if (clusterleaves.size() > 0) flattened.put(group);
+        }
+    }
+    
     private void collapse(JSONArray tree, JSONArray flattened) throws JSONException {
         double dist = tree.getDouble(1);
         int nLeaves = tree.getInt(0);
@@ -219,7 +332,7 @@ public class HClusterer {
             e.printStackTrace();
         }
         
-        TFScoreTest.TestCluster("COMPLETE", 1, 6, 7);
+        TFScoreTest.TestCluster("COMPLETE", 1, 6, 6);
 
     }
 
