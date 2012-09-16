@@ -310,7 +310,10 @@
 					// console.debug(data);
 					// }
 					// });
+					return false;
 
+				} else {
+					return true;
 				}
 			}
 
@@ -363,32 +366,33 @@
 				$("#btn-logout").bind('click', logout);
 				$("#btn-login").bind('click', goToAuthPage);
 
-				login();
+				if (login() == true) {
 
-				// fetch data
+					// fetch data
 
-				$.ajax({
-					url : "/oauthcallback?access_token=" + FL.access_token,
-					data : "access_token=" + FL.access_token,
-					type : "POST",
-					dataType : "json",
-					success : function(data, status, jqXHR) {
-						//console.debug(data);
+					$.ajax({
+						url : "/oauthcallback?access_token=" + FL.access_token,
+						data : "access_token=" + FL.access_token,
+						type : "POST",
+						dataType : "json",
+						success : function(data, status, jqXHR) {
+							//console.debug(data);
 
-						//fill in global data objects
-						FL['feedList'] = data.feedList;
-						FL['entryBank'] = data.entryBank;
+							//fill in global data objects
+							FL['feedList'] = data.feedList;
+							FL['entryBank'] = data.entryBank;
 
-						renderFeedList(FL['feedList']);
+							renderFeedList(FL['feedList']);
 
-					},
-					error : function(jqXHR, textStatus, errorThrown) {
-						console.debug(textStatus);
-						//logout();
-					}
-				});
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							console.debug(textStatus);
+							logout();
+						}
+					});
+				}
 			});
-			
+
 			function renderFeedList(data) {
 				$(".dropdown-menu .divider").nextAll("li").remove();
 				for (id in data) {
