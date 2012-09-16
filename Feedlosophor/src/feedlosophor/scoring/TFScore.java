@@ -21,7 +21,7 @@ public class TFScore {
 		this.docs = new Doc[contents.length];
 		for (int i = 0; i < contents.length; i++) {
 			String content = contents[i];
-			if (enableStemming) content = StemmingTest.Stemming(content);
+			if (enableStemming) content = TextStemming.Stemming(content);
 			docs[i] = DocParser.parse(content, titles[i], ids[i]);			
 		}
 

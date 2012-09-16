@@ -1,7 +1,6 @@
 package feedlosophor.scoring;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,7 +8,6 @@ import java.util.concurrent.Future;
 
 import org.json.JSONArray;
 
-import feedlosophor.clusterer.HClusterer;
 import feedlosophor.server.FeedHierachyFactory;
 import feedlosophor.server.FeedReader;
 
