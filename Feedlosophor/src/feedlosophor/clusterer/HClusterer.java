@@ -114,7 +114,7 @@ public class HClusterer {
             tree.put(2, best);
             JSONObject cluster = new JSONObject();
             leaves.remove(0);
-            cluster.put("id-best", best.get("id"));
+            cluster.put("id", best.get("id"));
             cluster.put("dupes", leaves);
             flattened.put(cluster);
         }
