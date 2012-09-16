@@ -2,6 +2,16 @@
 
   <!-- Servlets -->
   <servlet>
+    <servlet-name>LoginServlet</servlet-name>
+    <servlet-class>feedlosophor.server.LoginServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>OauthVeriServlet</servlet-name>
+    <servlet-class>feedlosophor.server.OauthVeriServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
     <servlet-name>greetServlet</servlet-name>
     <servlet-class>feedlosophor.server.GreetingServiceImpl</servlet-class>
   </servlet>
@@ -29,5 +39,15 @@
     <servlet-name>SystemServiceServlet</servlet-name>
     <url-pattern>/_ah/spi/*</url-pattern>
   </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>OauthVeriServlet</servlet-name>
+    <url-pattern>/oauthcallback</url-pattern>
+  </servlet-mapping>
 
+  <servlet-mapping>
+    <servlet-name>LoginServlet</servlet-name>
+    <url-pattern>/login</url-pattern>
+  </servlet-mapping>
+  
 </web-app>

@@ -45,10 +45,12 @@ public class OauthVeriServlet extends HttpServlet {
 			return;
 		}
 		
-		FeedReader reader = FeedReader.getUnreadFeeds(access_token);
+		FeedReader.getUnreadFeeds(access_token, 200);
+//		FeedReader reader = FeedReader.getUnreadFeeds(access_token);
+		resp.getWriter().println(access_token);
 	}
 
-	public String HttpConnect(String method, String urlString, String postContent) {
+	public static String HttpConnect(String method, String urlString, String postContent) {
 		URL url = null;
 		StringBuffer response = null;
 		try {
@@ -60,14 +62,17 @@ public class OauthVeriServlet extends HttpServlet {
 		HttpURLConnection connection;
 		try {
 			connection = (HttpURLConnection) url.openConnection();
-			connection.setDoOutput(true);
 			connection.setRequestMethod(method);
-			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-			DataOutputStream wr = new DataOutputStream (connection.getOutputStream());
-			wr.writeBytes (postContent);
-			wr.flush ();
-			wr.close ();
-
+			if (method.toUpperCase().equals("POST")) {
+				connection.setDoOutput(true);
+				connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+				DataOutputStream wr = new DataOutputStream (connection.getOutputStream());
+				wr.writeBytes (postContent);
+				wr.flush ();
+				wr.close ();
+			}
+			connection.connect();
+			
 			//Get Response	
 			InputStream is = connection.getInputStream();
 			BufferedReader rd = new BufferedReader(new InputStreamReader(is));
