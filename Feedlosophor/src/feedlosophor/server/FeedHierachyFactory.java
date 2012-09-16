@@ -21,11 +21,7 @@ import feedlosophor.scoring.TFScore;;
  */
 public class FeedHierachyFactory {
 
-    private HClusterer hc;
-    private TFScore tf;
-
-    private static ExecutorService es = Executors.newCachedThreadPool();
-
+    private ExecutorService es = Executors.newCachedThreadPool();
 
     /**
      * Constructor (similar for HClusterer)
@@ -35,8 +31,64 @@ public class FeedHierachyFactory {
      * @param clusterNumLeavesThreshold: maximum number of leaves per flattened cluster
      * @param clusterDistThreshold: minimum distance between two clusters considered different.
      */
-    public FeedHierachyFactory(String linkageMethod, int nClusters, int clusterNumLeavesThreshold, double clusterDistThreshold) {
-        hc = new HClusterer(linkageMethod, nClusters, clusterNumLeavesThreshold, clusterDistThreshold);
+    public FeedHierachyFactory() {
+    }
+
+    /**
+     * 
+     */
+    public Future<JSONArray> submitHierarchyRequest(String[] texts, String[] titles, String[] ids,
+            String linkageMethod, int nClusters, int clusterNumLeavesThreshold, double clusterDistThreshold) {
+        return es.submit(new HierarchyTask(texts, titles, ids, linkageMethod, 
+                nClusters, clusterNumLeavesThreshold, clusterDistThreshold));
+    }
+
+    public void restart() {
+        es.shutdown();
+        es = Executors.newCachedThreadPool();
+    }
+
+    public static void main(String[] args) {
+        FeedHierachyFactory fhf = new FeedHierachyFactory();
+        ArrayList<FeedReader> requests = new ArrayList<FeedReader>();
+        ArrayList<Future<JSONArray>> futures = new ArrayList<Future<JSONArray>>();
+        ArrayList<JSONArray> hierachies = new ArrayList<JSONArray>();
+
+        for (FeedReader fr : requests)
+            futures.add(fhf.submitHierarchyRequest(null, null, null, "AVERAGE", 1, 5, 6));
+        for (Future<JSONArray> ft : futures) {
+            try {
+                hierachies.add(ft.get());
+            } catch (Exception e) {
+                e.printStackTrace();
+                fhf.restart();
+            }
+        }
+    }
+
+
+
+}
+
+class HierarchyTask implements Callable<JSONArray> {
+    private String[] texts;
+    private String[] titles;
+    private String[] ids;
+    private HClusterer hc;
+    private TFScore tf;
+
+    HierarchyTask(String[] texts, String[] titles, String[] ids, 
+            String linkageMethod, int nClusters, int clusterNumLeavesThreshold, double clusterDistThreshold) {
+        this.texts = texts;
+        this.titles = titles;
+        this.ids = ids;
+        this.hc = new HClusterer(linkageMethod, nClusters, clusterNumLeavesThreshold, clusterDistThreshold);
+
+    }
+
+    @Override
+    public JSONArray call() throws Exception {
+        return getJsonHierachicalClusters(texts, titles, ids);
     }
 
     /**
@@ -46,7 +98,7 @@ public class FeedHierachyFactory {
      * @param ids
      * @return hierarchy
      */
-    JSONArray getJsonHierachicalClusters(String[] texts, String[] titles, String[] ids) {      
+    private JSONArray getJsonHierachicalClusters(String[] texts, String[] titles, String[] ids) {      
         tf = new TFScore(texts, titles, ids);
         //System.out.println("vector size = " + tfc.tfWords.size());
         try {
@@ -68,51 +120,5 @@ public class FeedHierachyFactory {
                 return null;
             }
         }
-    }
-
-    public static void main(String[] args) {
-        ArrayList<FeedReader> requests = new ArrayList<FeedReader>();
-        ArrayList<Future<JSONArray>> futures = new ArrayList<Future<JSONArray>>();
-        ArrayList<JSONArray> hierachies = new ArrayList<JSONArray>();
-
-        for (FeedReader fr : requests)
-            futures.add(FeedHierachyFactory.submitHierarchyRequest(null, null));
-        for (Future<JSONArray> ft : futures) {
-            try {
-                hierachies.add(ft.get());
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-                es.shutdown();
-                es = Executors.newCachedThreadPool();
-            }
-        }
-    }
-
-    /**
-     * 
-     */
-    public static Future<JSONArray> submitHierarchyRequest(String[] texts, String[] ids) {
-        return es.submit(new HierarchyTask(texts, ids));
-    }
-
-
-}
-
-class HierarchyTask implements Callable<JSONArray> {
-
-    private String[] texts;
-    private String[] titles;
-    private String[] ids;
-
-    HierarchyTask(String[] texts, String[] ids) {
-        this.texts = texts;
-        this.ids = ids;
-    }
-
-    @Override
-    public JSONArray call() throws Exception {
-        FeedHierachyFactory fhf = new FeedHierachyFactory("AVERAGE", 1, 5, 6);
-        return fhf.getJsonHierachicalClusters(texts, titles, ids);
     }
 }
