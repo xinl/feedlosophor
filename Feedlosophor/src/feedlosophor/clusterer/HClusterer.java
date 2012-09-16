@@ -204,7 +204,7 @@ public class HClusterer {
                 "\n" + 
                 "";
         try {
-            HClusterer hc = new HClusterer("AVERAGE", 1, 5, 100);
+            HClusterer hc = new HClusterer("AVERAGE", 1, 5, 7);
             String jsonHierachy = hc.getJsonHierachy(new ByteArrayInputStream(rawData.getBytes("UTF-8")));
             System.out.println(jsonHierachy);
             String result = hc.getClusters(jsonHierachy);
@@ -219,7 +219,7 @@ public class HClusterer {
             e.printStackTrace();
         }
         
-        TFScoreTest.TestCluster("COMPLETE", 1, 6, 6);
+        TFScoreTest.TestCluster("COMPLETE", 1, 6, 7);
 
     }
 

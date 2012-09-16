@@ -99,7 +99,7 @@ class HierarchyTask implements Callable<JSONArray> {
      * @return hierarchy
      */
     private JSONArray getJsonHierachicalClusters(String[] texts, String[] titles, String[] ids) {      
-        tf = new TFScore(texts, titles, ids, true);
+        tf = new TFScore(texts, titles, ids, false);
         //System.out.println("vector size = " + tfc.tfWords.size());
         try {
             String jsonHierachy = hc.getJsonHierachy(new ByteArrayInputStream(tf.getResult().getBytes("UTF-8")));

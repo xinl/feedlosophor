@@ -25,7 +25,7 @@ public class OauthVeriServlet extends HttpServlet {
 	static String access_token = null;
 
 	@Override
-	public void doGet(HttpServletRequest req, HttpServletResponse resp)
+	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		resp.setContentType("text/plain");
 		String content = "code=" + req.getParameter("code") + "&client_id=" + 
@@ -48,7 +48,7 @@ public class OauthVeriServlet extends HttpServlet {
 			return;
 		}
 		
-		resp.getWriter().println(FeedReader.getUnreadFeeds(access_token, 2));
+//		resp.getWriter().println(FeedReader.getUnreadFeeds(access_token, 2));
 //		FeedReader reader = FeedReader.getUnreadFeeds(access_token);
 		resp.getWriter().println(access_token);
 		
