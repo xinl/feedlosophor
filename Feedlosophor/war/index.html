@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+
+		<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
+		Remove this if you use the .htaccess -->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+		<title>Read</title>
+		<meta name="description" content="" />
+		<meta name="author" content="Sim" />
+
+		<meta name="viewport" content="width=device-width; initial-scale=1.0" />
+
+		<!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
+		<link rel="shortcut icon" href="/favicon.ico" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+		<link rel="stylesheet" href="css/bootstrap.min.css" />
+		<style>
+			html {
+				height: 100%;
+			}
+			body {
+				height: 100%;
+			}
+			.main {
+				padding: 0;
+			}
+			.list, .content {
+				position: absolute;
+				top: 40px;
+				bottom: 0;
+				box-sizing: border-box;
+				float: left;
+				display: block;
+				height: auto;
+				overflow-y: scroll;
+			}
+			.list {
+				width: 35%;
+				padding: 15px;
+				background: #EEE;
+				border-right: 1px solid #D4D4D4;
+			}
+			.content {
+				width: 65%;
+				padding: 25px 35px;
+				margin-left: 35%;
+			}
+			.list .label, .dropdown-menu .badge {
+				margin-left: 0.5em;
+			}
+			.meta {
+				color: #999;
+			}
+			.entry-title {
+				font-size: 150%;
+			}
+			.entry-meta {
+				margin-bottom: 1em;
+			}
+			.entry-body {
+				margin-bottom: 2em;
+			}
+			.list-meta {
+				font-size: 85%;
+				max-height: 40px;
+				overflow: hidden;
+			}
+			.list-title {
+				font-weight: bold;
+			}
+			.list li a {
+				background-color: #EEE;
+				color: #777;
+			}
+			.list li a:hover {
+				background-color: #E7E7E7;
+				color: #555;
+			}
+			.list .unread a, .list .unread a:hover {
+				background-color: #FFF;
+				color: #08C;
+			}
+			.list .unread a:hover {
+				background-color: #F6F6F6;
+				color: #005580;
+			}
+			.list .active a, .list .active a:hover {
+				background-color: #08C;
+				color: #FFF;
+			}
+			.list .active .meta {
+				color: #DDD;
+			}
+			.dropdown-menu .badge {
+				margin-top: 1px;
+			}
+			.dropdown-submenu > a::after {
+				display: none;
+			}
+			.dropdown-submenu > a::before {
+				display: block;
+				float: right;
+				width: 0;
+				height: 0;
+				margin-top: 5px;
+				margin-right: -10px;
+				border-color: transparent;
+				border-left-color: #ccc;
+				border-style: solid;
+				border-width: 5px 0 5px 5px;
+				content: " ";
+			}
+			.toolbar {
+				padding: 0;
+			}
+			.toolbar-left, .toolbar-right {
+				margin: 0;
+				float: left;
+				box-sizing: border-box;
+				display: block;
+			}
+			.toolbar-left {
+				width: 35%;
+				padding: 0 15px 0 11px;
+			}
+			.toolbar-right {
+				width: 65%;
+				padding: 0 15px 0 11px;
+			}
+			button.active i.icon-star-empty {
+				background-position: -120px 0;
+			}
+			button.active i.icon-eye-close {
+				background-position: -96px -120px;
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<div id="dialog-login" class="modal hide fade" data-keyboard="false" data-backdrop="static">
+			<div class="modal-header">
+				<h1>Feed·los·o·phor</h1>
+			</div>
+			<div class="modal-body">
+				<p>
+					The smartest feed reader on earth.
+				</p>
+			</div>
+			<div class="modal-footer">
+				<a href="#" class="btn btn-primary btn-large" id="btn-login">Login with Google Reader</a>
+			</div>
+		</div>
+
+		<div class="navbar navbar-inverse navbar-fixed-top">
+			<div class="navbar-inner">
+				<div class="container-fluid toolbar">
+					<!-- <a class="brand" href="#">READ</a> -->
+					<div class="btn-toolbar toolbar-left">
+						<div class="btn-group pull-right">
+							<a id="feed-dropdown" class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span id="current-feed-name">All items</span> <span id="current-feed-unread" class="badge"></span> <span class="caret"></span> </a>
+							<ul class="dropdown-menu">
+								<li class="feed-item">
+									<a id="feed-dropdown-all-items" href="#">All items <span class="badge pull-right"></span></a>
+								</li>
+								<li class="divider"></li>
+
+							</ul>
+						</div>
+						<div class="btn-group" data-toggle="buttons-radio">
+							<button id="btn-detailed-list" type="button" class="btn active">
+								<i class="icon-th-list"></i>
+							</button>
+							<button id="btn-brief-list" type="button" class="btn">
+								<i class="icon-list"></i>
+							</button>
+						</div>
+						<!--
+						<div class="btn-group">
+						<button type="button" class="btn">
+						<i class="icon-repeat"></i>
+						</button>
+						</div>
+						-->
+					</div>
+					<div class="btn-toolbar toolbar-right">
+						<div class="btn-group pull-right">
+							<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-cog"></i> <span class="caret"></span> </a>
+							<ul class="dropdown-menu">
+								<li>
+									<a href="#" id="btn-logout">Logout</a>
+								</li>
+							</ul>
+						</div>
+						<div class="btn-group">
+							<button id="btn-star" type="button" class="btn">
+								<i class="icon-star-empty"></i>
+							</button>
+						</div>
+						<div class="btn-group">
+							<button id="btn-keep-unread" type="button" class="btn">
+								<i class="icon-eye-close"></i> Keep unread
+							</button>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid main">
+			<div id="entry-list" class="list">
+
+			</div>
+
+			<div class="content">
+				<h2 class="entry-title"><a id="entry-title" href="#"></a>&nbsp;<i class="icon-share-alt"></i></h2>
+				<div id="entry-meta" class="meta entry-meta"></div>
+				<div id="entry-body" class="entry-body">
+					<div>
+						<div class="item-body"></div>
+					</div>
+				</div>
+				<div id="entry-dupes"></div>
+			</div>
+		</div>
+		<!-- /container -->
+		<script src="js/jquery-1.8.1.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/jquery.cookie.js"></script>
+		<script>
+			if ( typeof String.prototype.startsWith != 'function') {
+				String.prototype.startsWith = function(str) {
+					return this.slice(0, str.length) == str;
+				};
+			}
+
+			if ( typeof String.prototype.endsWith != 'function') {
+				String.prototype.endsWith = function(str) {
+					return this.slice(-str.length) == str;
+				};
+			}
+
+			var FL = {
+				client_id : "327830914748.apps.googleusercontent.com",
+				api_scope : "https://www.google.com/reader/api",
+				redirect_url : "http://127.0.0.1:8020/Read/"
+			};
+
+			function getHashParams() {
+				var params = {}, queryString = location.hash.substring(1), regex = /([^&=]+)=([^&]*)/g, m;
+				while ( m = regex.exec(queryString)) {
+					params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+				}
+				return params;
+			}
+
+			function goToAuthPage() {
+				document.location = "https://accounts.google.com/o/oauth2/auth?scope=" + encodeURIComponent(FL.api_scope) + "&state=feedlosophor&redirect_uri=" + encodeURIComponent(FL.redirect_url) + "&response_type=token&client_id=" + encodeURIComponent(FL.client_id);
+
+			}
+
+			function showLoginDialog() {
+				$("#dialog-login").modal("show");
+			}
+
+			function login() {
+				if (window.location.hash && window.location.hash != "") {
+					//alert("OK!");
+					var params = getHashParams();
+					FL['access_token'] = params['access_token'];
+					$.cookie('access_token', FL['access_token']);
+
+					// $.ajax({
+					// url : "https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=" + params['access_token'],
+					// dataType : 'json',
+					// async : false,
+					// success : function(data, status, jqXHR) {
+					// //console.debug(data);
+					// if (data.scope != FL.api_scope || data.audience != FL.client_id) {
+					// $.removeCookie('access_token');
+					// alert("Error validating access token.");
+					// window.location = FL.redirect_url;
+					// } else {
+					// $.cookie('access_token', "FL['access_token']", {
+					// expires : data.expires_in / 60 / 60 / 24.0
+					// });
+					// }
+					// },
+					// error : function(jqXHR, textStatus, errorThrown) {
+					// console.debug(textStatus);
+					// }
+					// });
+				}
+				if ($.cookie('access_token') == null) {
+					showLoginDialog();
+
+					// testing
+
+					// $.ajax({
+					// url : "https://www.google.com/reader/api/0/unread-count?output=json&access_token=" + FL['access_token'],
+					// headers : {
+					// "Authorization" : "Bearer " + FL.access_token
+					// },
+					// success : function(data, status, jqXHR) {
+					// console.debug(data);
+					// }
+					// });
+
+				}
+			}
+
+			function logout() {
+				$.removeCookie('access_token');
+				window.location = FL.redirect_url;
+			}
+
+			// on load
+			$(function() {
+				// bind list view buttons
+				$('#btn-detailed-list').bind('click', function() {
+					if (!$(this).hasClass("active")) {
+						$(".list-meta").show();
+					}
+				});
+				$('#btn-brief-list').bind('click', function() {
+					if (!$(this).hasClass("active")) {
+						$(".list-meta").hide();
+					}
+				});
+				$(".list a.list-item").live("click", function() {
+					if (!$(this).hasClass("active")) {
+						showEntry(decodeId($(this).attr("id")));
+					}
+				});
+				$(".navbar li.feed-item a").live("click", function() {
+					if (!$(this).hasClass("active")) {
+						renderEntryList(decodeId($(this).parent().attr("id")));
+					}
+				});
+				$(".list a.btn-mark-group-read").live("click", function() {
+					var group = FL.feedList[FL.currentFeed].groups[$(this).parent().parent().prevAll().length];
+					markGroupRead(group);
+				});
+				$("#btn-star").bind('click', function() {
+					if ($(this).hasClass("active")) {
+						unstarEntry(FL.entryBank[FL.currentEntry]);
+					} else {
+						starEntry(FL.entryBank[FL.currentEntry]);
+					}
+				});
+				$("#btn-keep-unread").bind('click', function() {
+					if ($(this).hasClass("active")) {
+						markEntryRead(FL.entryBank[FL.currentEntry]);
+					} else {
+						keepEntryUnread(FL.entryBank[FL.currentEntry]);
+					}
+				});
+				$("#btn-logout").bind('click', logout);
+				$("#btn-login").bind('click', goToAuthPage);
+
+				login();
+
+				// fetch data
+
+				$.ajax({
+					url : "https://www.google.com/reader/api/0/unread-count?output=json&access_token=" + FL.access_token,
+					data : "access_token=" + FL.access_token,
+					success : function(data, status, jqXHR) {
+						console.debug(data);
+						
+						//TODO: fill in global data objects
+						
+						renderFeedList(FL['feedList']);
+						
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						console.debug(textStatus);
+						//logout();
+					}
+				});
+
+				FL['feedList'] = {
+					"user/15730749543509430761/label/IT" : {
+						"title" : "IT",
+						"unread" : 20,
+						"groups" : [[{
+							"id" : "tag:google.com,2005:reader/item/1bab1bbe8a8ad82f",
+							"dupes" : [{
+								"id" : "tag:google.com,2005:reader/item/024025978b5e50d2"
+							}]
+						}, {
+							"id" : "tag:google.com,2005:reader/item/024025978b5e50d2"
+						}]]
+					},
+					"user/15730749543509430761/label/Art" : {
+						"title" : "Art",
+						"unread" : 5,
+						"groups" : [[{
+							"id" : "tag:google.com,2005:reader/item/1bab1bbe8a8ad82f",
+							"dupes" : [{
+								"id" : "tag:google.com,2005:reader/item/024025978b5e50d2"
+							}]
+						}, {
+							"id" : "tag:google.com,2005:reader/item/024025978b5e50d2"
+						}]]
+					},
+					"user/15730749543509430761/state/com.google/reading-list" : {
+						"title" : "All items",
+						"unread" : 25,
+						"groups" : [[{
+							"id" : "tag:google.com,2005:reader/item/1bab1bbe8a8ad82f",
+							"dupes" : [{
+								"id" : "tag:google.com,2005:reader/item/024025978b5e50d2"
+							}]
+						}, {
+							"id" : "tag:google.com,2005:reader/item/024025978b5e50d2"
+						}]]
+					},
+					"feed/http://rss.slashdot.org/Slashdot/slashdot" : {
+						"title" : "Slashdot",
+						"unread" : 14,
+						"category" : ["user/15730749543509430761/label/IT"],
+						"groups" : [[{
+							"id" : "tag:google.com,2005:reader/item/1bab1bbe8a8ad82f",
+							"dupes" : [{
+								"id" : "tag:google.com,2005:reader/item/024025978b5e50d2"
+							}]
+						}, {
+							"id" : "tag:google.com,2005:reader/item/024025978b5e50d2"
+						}]]
+					},
+					"feed/http://arstechnica.com/index.rssx" : {
+						"title" : "Ars Technica",
+						"unread" : 6,
+						"category" : ["user/15730749543509430761/label/IT"],
+						"groups" : [[{
+							"id" : "tag:google.com,2005:reader/item/1bab1bbe8a8ad82f",
+							"dupes" : [{
+								"id" : "tag:google.com,2005:reader/item/024025978b5e50d2"
+							}]
+						}, {
+							"id" : "tag:google.com,2005:reader/item/024025978b5e50d2"
+						}]]
+					},
+					"feed/http://feed.feedsky.com/typeisbeautiful" : {
+						"title" : "Type is Beautiful",
+						"unread" : 5,
+						"category" : ["user/15730749543509430761/label/Art"],
+						"groups" : [[{
+							"id" : "tag:google.com,2005:reader/item/1bab1bbe8a8ad82f",
+							"dupes" : [{
+								"id" : "tag:google.com,2005:reader/item/024025978b5e50d2"
+							}]
+						}, {
+							"id" : "tag:google.com,2005:reader/item/024025978b5e50d2"
+						}]]
+					},
+				};
+
+				FL['entryBank'] = {
+					"tag:google.com,2005:reader/item/1bab1bbe8a8ad82f" : {
+						"crawlTimeMsec" : "1321321559633",
+						"timestampUsec" : "1321321559633973",
+						"id" : "tag:google.com,2005:reader/item/1bab1bbe8a8ad82f",
+						"categories" : ["user/15730749543509430761/label/Art", "user/15730749543509430761/state/com.google/reading-list"],
+						"title" : "Folder and tag renaming",
+						"published" : 1347730975,
+						"updated" : 1347730975,
+						"alternate" : [{
+							"href" : "http://feedproxy.google.com/~r/blogspot/dtKx/~3/6xE-SP3R0d0/folder-and-tag-renaming.html",
+							"type" : "text/html"
+						}],
+						"canonical" : [{
+							"href" : "http://googlereader.blogspot.com/2010/06/folder-and-tag-renaming.html"
+						}],
+						"content" : {
+							"direction" : "ltr",
+							"content" : "Posted by Wiktor Gworek, 20% task force (Krakow, Poland)\n\n\u003cp\u003eLast year we \u003ca href\u003d\"http://googlereader.blogspot.com/2009/09/calling-all-ideas.html\"\u003eannounced\u003c/a\u003e that we wanted to hear \u003ca href\u003d\"http://productideas.appspot.com/#16/e\u003d22493\"\u003eyour wish list for features\u003c/a\u003e in Google Reader, and one of most highly requested features was the ability to rename folders and tags. Today we are rolling out this feature with \u003ca href\u003d\"http://googlereader.blogspot.com/2010/05/little-bit-of-polish.html\"\u003ea little bit of Polish\u003c/a\u003e help from Krakow.\u003c/p\u003e\n\n\u003cp\u003eYou can rename folders and tags on \u003ca href\u003d\"http://www.google.com/reader/settings?display\u003dedit-labels\"\u003ethe settings page\u003c/a\u003e:\u003c/p\u003e\n\n\u003cp style\u003d\"text-align:center\"\u003e\n\u003ca href\u003d\"http://3.bp.blogspot.com/_O3jT2uzrsQE/TAVxZhjRJeI/AAAAAAAAAaM/gpY2UbsGHXw/s1600/index.001.png\"\u003e\u003cimg width\u003d\"400\" height\u003d\"176\" src\u003d\"http://3.bp.blogspot.com/_O3jT2uzrsQE/TAVxZhjRJeI/AAAAAAAAAaM/gpY2UbsGHXw/s400/index.001.png\" border\u003d\"0\" alt\u003d\"Renaming on the settings page\"\u003e\u003c/a\u003e\n\u003c/p\u003e\n\n\u003cp\u003eAnd you can also edit these names right from the contextual menu in your subscription list.\u003c/p\u003e\n\n\u003cp style\u003d\"text-align:center\"\u003e\n\u003ca href\u003d\"http://1.bp.blogspot.com/_O3jT2uzrsQE/TAVxgQKUixI/AAAAAAAAAaU/WEuWd9yefFs/s1600/index.002.png\"\u003e\u003cimg width\u003d\"400\" height\u003d\"274\" src\u003d\"http://1.bp.blogspot.com/_O3jT2uzrsQE/TAVxgQKUixI/AAAAAAAAAaU/WEuWd9yefFs/s400/index.002.png\" border\u003d\"0\" alt\u003d\"Renaming from contextual menu\"\u003e\u003c/a\u003e\n\u003c/p\u003e\n\n\u003cp\u003eAlso, as we announced \u003ca href\u003d\"http://googlereader.blogspot.com/2010/05/spring-cleaning-comments-offline-and.html\"\u003elast week\u003c/a\u003e, today we’ve disabled offline access through Gears, and phased out support for older browsers.\u003c/p\u003e\n\n\u003cp\u003eAs always, if you have any questions or comments, please head over to \u003ca href\u003d\"http://www.google.com/support/forum/p/reader\"\u003eour help forums\u003c/a\u003e, or send us a message on \u003ca href\u003d\"http://twitter.com/googlereader\"\u003eTwitter\u003c/a\u003e.\u003c/p\u003e\u003cdiv\u003e\u003cimg width\u003d\"1\" height\u003d\"1\" src\u003d\"https://blogger.googleusercontent.com/tracker/17412960-1745450100118090890?l\u003dgooglereader.blogspot.com\" alt\u003d\"\"\u003e\u003c/div\u003e\u003cdiv\u003e\n\u003ca href\u003d\"http://feeds.feedburner.com/~ff/blogspot/dtKx?a\u003d6xE-SP3R0d0:lnZkIc-UUys:V_sGLiPBpWU\"\u003e\u003cimg src\u003d\"http://feeds.feedburner.com/~ff/blogspot/dtKx?i\u003d6xE-SP3R0d0:lnZkIc-UUys:V_sGLiPBpWU\" border\u003d\"0\"\u003e\u003c/a\u003e \u003ca href\u003d\"http://feeds.feedburner.com/~ff/blogspot/dtKx?a\u003d6xE-SP3R0d0:lnZkIc-UUys:-BTjWOF_DHI\"\u003e\u003cimg src\u003d\"http://feeds.feedburner.com/~ff/blogspot/dtKx?i\u003d6xE-SP3R0d0:lnZkIc-UUys:-BTjWOF_DHI\" border\u003d\"0\"\u003e\u003c/a\u003e\n\u003c/div\u003e\u003cimg src\u003d\"http://feeds.feedburner.com/~r/blogspot/dtKx/~4/6xE-SP3R0d0\" height\u003d\"1\" width\u003d\"1\"\u003e"
+						},
+						"author" : "Brian Shih",
+						"likingUsers" : [],
+						"comments" : [],
+						"annotations" : [],
+						"origin" : {
+							"streamId" : "feed/http://rss.slashdot.org/Slashdot/slashdot",
+							"title" : "Official Google Reader Blog",
+							"htmlUrl" : "http://googlereader.blogspot.com/"
+						}
+					},
+					"tag:google.com,2005:reader/item/024025978b5e50d2" : {
+						"crawlTimeMsec" : "1255356559426",
+						"timestampUsec" : "1255356559426211",
+						"id" : "tag:google.com,2005:reader/item/024025978b5e50d2",
+						"categories" : ["user/15730749543509430761/label/IT", "user/15730749543509430761/state/com.google/reading-list", "Humor", "Video", "funny", "humor", "sarah-silverman", "sell the vatican", "the vatican", "vatican"],
+						"title" : "Sarah Silverman Has an Idea [Video]",
+						"published" : 1255354897,
+						"updated" : 1255354897,
+						"alternate" : [{
+							"href" : "http://coedmagazine.com/2009/10/12/sarah-silverman-has-an-idea-video/",
+							"type" : "text/html"
+						}],
+						"summary" : {
+							"direction" : "ltr",
+							"content" : "I'm not exactly sure what to make of Sarah Silverman's newest video. On the one hand, it just kind of seems like the comedian is trying desperately to hit that perfect note between outrageous, and just cute enough to make everyone like her, in order to have her own viral video. Either that, or she really just wants to sell the Vatican to end world hunger. (Which is not a bad idea, btw...)\u003cimg alt\u003d\"\" border\u003d\"0\" src\u003d\"http://stats.wordpress.com/b.gif?host\u003dcoedmagazine.com\u0026amp;blog\u003d3508545\u0026amp;post\u003d106802\u0026amp;subd\u003dcoedmagazine\u0026amp;ref\u003d\u0026amp;feed\u003d1\"\u003e"
+						},
+						"author" : "Andrew - Hunter College",
+						"likingUsers" : [],
+						"comments" : [],
+						"annotations" : [],
+						"origin" : {
+							"streamId" : "feed/http://arstechnica.com/index.rssx",
+							"title" : "COEDMagazine",
+							"htmlUrl" : "http://coedmagazine.com"
+						}
+					}
+				};
+
+			});
+
+			function renderFeedList(data) {
+				$(".dropdown-menu .divider").nextAll("li").remove();
+				for (id in data) {
+					if (id.startsWith("user/")) {
+						if (id.endsWith("/state/com.google/reading-list")) {
+							$("#feed-dropdown-all-items .badge").text(data[id].unread);
+							$("#feed-dropdown-all-items").parent().attr("id", encodeId(id));
+						} else {
+							//console.debug("Adding " + id.replace(/\//g, "_"));
+							$("#feed-dropdown").next(".dropdown-menu").append('<li class="dropdown-submenu feed-item" id="' + encodeId(id) + '"><a href="#"><span class="badge pull-right">' + data[id].unread + '</span>' + data[id].title + '</a><ul class="dropdown-menu"></ul></li>');
+						}
+					}
+				}
+				for (id in data) {
+					if (id.startsWith("feed/")) {
+						if (data[id]['category'] != null) {
+							for (i in data[id]['category']) {
+								//console.debug("Adding " + data[id].title + " to " + data[id]['category'][i].replace(/\//g, "_"));
+								$("#" + encodeId(data[id]['category'][i]) + " .dropdown-menu").append('<li class="feed-item" id="' + encodeId(id) + '"><a href="#"><span class="badge pull-right">' + data[id].unread + '</span>' + data[id].title + '</a></li>');
+							}
+						} else {
+							$("#feed-dropdown").next(".dropdown-menu").append('<li id="' + encodeId(id) + '" class="feed-item"><a href="#"><span class="badge pull-right">' + data[id].unread + '</span>' + data[id].title + '</a></li>');
+						}
+					}
+				}
+				renderEntryList(decodeId($("#feed-dropdown-all-items").parent().attr("id")));
+			}
+
+			//render entry-list
+			function renderEntryList(id) {
+				FL["currentFeed"] = id;
+				console.debug("Rendering entry list for " + id);
+				$("#feed-dropdown #current-feed-name").text(FL['feedList'][id].title);
+				$("#feed-dropdown #current-feed-unread").text(FL['feedList'][id].unread);
+
+				var data = FL['feedList'][id].groups;
+
+				var html = "";
+				for ( i = 0; i < data.length; i++) {
+					html += '<ul class="nav nav-tabs nav-stacked">';
+					for ( j = 0; j < data[i].length; j++) {
+						html += renderEntryListItem(FL.entryBank[data[i][j].id], data[i][j].dupes);
+						FL.entryBank[data[i][j].id]['dupes'] = data[i][j].dupes;
+					}
+					if (j > 1) {
+						html += '<li><a href="#" class="pull-right btn-mark-group-read"> <small><i class="icon-eye-open"></i> Mark group as read</small></a></li>';
+					}
+					html += '</ul>';
+				}
+				$("#entry-list").html(html);
+				showEntry(decodeId($("#entry-list .list-item").first().attr("id")));
+			}
+
+			function renderEntryListItem(entry, dupes) {
+				var html = "";
+				html += '<li class="' + (entry.read ? "" : "unread") + '"><a href="#" class="list-item" id="' + encodeId(entry.id) + '">';
+				html += '<div class="meta list-meta"><div class="pull-right">' + prettyDate(entry.published) + '</div><div>' + entry.origin.title + '</div></div>';
+				if (dupes != null && dupes.length >= 1) {
+					html += '<div class="pull-right"><span class="label">' + dupes.length + '+</span></div>';
+				}
+				html += '<div class="list-title">' + entry.title + '</div>';
+				html += '<div class="meta list-meta">' + generateStub((entry.content == null) ? entry.summary.content : entry.content.content) + '</div>';
+				html += '</a></li>';
+				return html;
+			}
+
+			function showEntry(id) {
+				FL["currentEntry"] = id;
+
+				var entry = FL['entryBank'][id];
+
+				markEntryRead(entry);
+				if (entry.starred) {
+					$("#btn-star").addClass("active");
+				} else {
+					$("#btn-star").removeClass("active");
+				}
+
+				$("#entry-title").text(entry.title);
+				$("#entry-title").attr("href", entry.alternate[0].href);
+				$("#entry-meta").html('from <a href="' + entry.origin.htmlUrl + '">' + entry.origin.title + '</a>' + ((entry.author != null) ? " by " + entry.author : ""));
+				$("#entry-body").html((entry.content == null) ? entry.summary.content : entry.content.content);
+				if (entry.dupes != null) {
+					var dupesHtml = "";
+					if (entry.dupes.length == 1) {
+						dupesHtml += '<h3>1 more similar item:</h3>';
+					} else {
+						dupesHtml += '<h3>' + entry.dupes.length + ' more similar items:</h3>';
+					}
+					dupesHtml += '<ul class="nav nav-tabs nav-stacked">';
+					for ( i = 0; i < entry.dupes.length; i++) {
+						//console.debug(FL['entryBank'][entry.dupes[i].id]);
+						dupesHtml += renderDupeListItem(FL['entryBank'][entry.dupes[i].id]);
+					}
+					dupesHtml += "</ul>";
+					//alert(dupesHtml);
+					$("#entry-dupes").html(dupesHtml);
+				} else {
+					$("#entry-dupes").html("");
+				}
+			}
+
+			function renderDupeListItem(entry) {
+				var html = "";
+				html += '<li class="unread"><a href="' + entry.alternate[0].href + '" class="list-item" target="_blank">';
+				html += '<div class="meta list-meta"><div class="pull-right">' + prettyDate(entry.published) + '</div><div>' + entry.origin.title + '</div></div>';
+				html += '<div class="list-title">' + entry.title + '</div>';
+				html += '<div class="meta list-meta">' + generateStub((entry.content == null) ? entry.summary.content : entry.content.content) + '</div>';
+				html += '</a></li>';
+				return html;
+			}
+
+			function encodeId(gid) {
+				return gid.replace(/\//g, "_1_").replace(/:/g, "_2_").replace(/,/g, "_3_").replace(/\./g, "_4_");
+			}
+
+			function decodeId(gid) {
+				return gid.replace(/_1_/g, "/").replace(/_2_/g, ":").replace(/_3_/g, ",").replace(/_4_/g, ".");
+			}
+
+			function prettyDate(ms) {
+				ms *= 1000;
+				var then = new Date();
+				then.setTime(ms);
+				var now = new Date().getTime();
+
+				if (now - ms > 86400000) {
+					return then.toLocaleDateString();
+				} else {
+					return then.getHours() + ":" + then.getMinutes();
+				}
+			}
+
+			function generateStub(content) {
+				//alert($(content).text());
+				return $("<div>" + content + "</div>").text().substring(0, 200);
+			}
+
+			function updateUnreadCount(entry, delta) {
+				var cats = entry.categories;
+				var badge;
+				for (i in cats) {
+					if (cats[i].startsWith("user/")) {
+						badge = $("#" + encodeId(cats[i]) + " .badge").first();
+						// console.debug(badge.html());
+						// console.debug(parseInt(badge.text()));
+						badge.text(parseInt(badge.text()) + delta);
+						// console.debug(badge.text());
+						if (FL['currentFeed'] == cats[i]) {
+							$("#current-feed-unread").text(parseInt($("#current-feed-unread").text()) + delta);
+						}
+					}
+				}
+				badge = $("#" + encodeId(entry.origin.streamId) + " .badge").first();
+				badge.text(parseInt(badge.text()) + delta);
+			}
+
+			function markEntryRead(entry, suppressRemote) {
+				var ids = null;
+				if (entry.read != true) {
+					ids = [entry.id];
+					entry['read'] = true;
+					updateUnreadCount(entry, -1);
+
+					for (i in entry.dupes) {
+						ids.push(entry.dupes[i].id);
+						FL.entryBank[entry.dupes[i].id]['read'] = true;
+						updateUnreadCount(FL['entryBank'][entry.dupes[i].id], -1);
+					}
+					if (!suppressRemote) {
+						console.debug("Marking " + JSON.stringify(ids) + " as read.");
+						//TODO
+					}
+
+				}
+				$("#btn-keep-unread").removeClass("active");
+				$("#entry-list .active").removeClass("active");
+				$("#" + encodeId(FL["currentEntry"])).parent().addClass("active").removeClass("unread");
+
+			}
+
+			function keepEntryUnread(entry) {
+				if (entry.read == true) {
+					var ids = [entry.id];
+					entry['read'] = false;
+					updateUnreadCount(entry, +1);
+
+					for (i in entry.dupes) {
+						ids.push(entry.dupes[i].id);
+						FL.entryBank[entry.dupes[i].id]['read'] = false;
+						updateUnreadCount(FL.entryBank[entry.dupes[i].id], +1);
+					}
+
+					console.debug("Keeping " + JSON.stringify(ids) + " as unread.");
+					//TODO
+				}
+				$("#btn-keep-unread").addClass("active");
+				$("#" + encodeId(FL["currentEntry"])).parent().addClass("unread");
+
+			}
+
+			function starEntry(entry) {
+				$("#btn-star").addClass("active");
+
+				console.debug("Starring " + entry.id);
+			}
+
+			function unstarEntry(entry) {
+				$("#btn-star").removeClass("active");
+
+				console.debug("Removing star from " + entry.id);
+			}
+
+			function markGroupRead(group) {
+				var ids = [];
+				for ( i = 0; i < group.length; i++) {
+					markEntryRead(FL.entryBank[group[i].id], true);
+					ids.push(group[i].id);
+					if (group[i]['dupes']) {
+						for ( j = 0; j < group[i]['dupes'].length; j++) {
+							ids.push(group[i]['dupes'][j].id);
+						}
+					}
+				}
+				console.debug("Marking " + JSON.stringify(ids) + " as read");
+				//TODO
+			}
+
+		</script>
+	</body>
+</html>
