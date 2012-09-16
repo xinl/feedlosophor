@@ -15,6 +15,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class OauthVeriServlet extends HttpServlet {
 	static String access_token = null;
 
@@ -27,14 +30,22 @@ public class OauthVeriServlet extends HttpServlet {
 				LoginServlet.redirectURL + "&grant_type=authorization_code";
 		String response = HttpConnect("POST", "https://accounts.google.com/o/oauth2/token", content);
 
-		Pattern p = Pattern.compile("\"access_token\".*?\"(.*?)\",");
-		Matcher m = p.matcher(response.toString());
-		if (m.find()) {
-			access_token = m.group(1);
-			resp.getWriter().println(access_token);
-			FeedReader reader = new FeedReader(access_token);
-			String unreadFeeds = reader.getUnreadFeeds();
+		JSONObject jo = null;
+		try {
+			jo = new JSONObject(response.toString());
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return;
 		}
+		
+		try {
+			access_token = (String) jo.get("access_token");
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		FeedReader reader = FeedReader.getUnreadFeeds(access_token);
 	}
 
 	public String HttpConnect(String method, String urlString, String postContent) {
