@@ -1,3 +1,4 @@
+
 package feedlosophor.scoring;
 import java.io.IOException;
 import java.io.Reader;
