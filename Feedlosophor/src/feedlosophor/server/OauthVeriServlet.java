@@ -28,59 +28,23 @@ public class OauthVeriServlet extends HttpServlet {
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		resp.setContentType("text/plain");
+		/*
 		String content = "code=" + req.getParameter("code") + "&client_id=" + 
 				LoginServlet.clientID + "&client_secret=" + LoginServlet.clientSecret + "&redirect_uri=" + 
 				LoginServlet.redirectURL + "&grant_type=authorization_code";
+				*/
+		
+		/*
 		String response = HttpConnect("POST", "https://accounts.google.com/o/oauth2/token", content);
+		*/
+		access_token = req.getParameter("access_token");
+				
 
-		JSONObject jo = null;
-		try {
-			jo = new JSONObject(response.toString());
-		} catch (JSONException e) {
-			e.printStackTrace();
-			return;
-		}
-		
-		try {
-			access_token = (String) jo.get("access_token");
-		} catch (JSONException e) {
-			e.printStackTrace();
-			return;
-		}
-		
-		resp.getWriter().println(FeedReader.getFeeds(access_token, 5));
+//		resp.getWriter().println(FeedReader.getFeeds(access_token, 5));
 //		FeedReader reader = FeedReader.getUnreadFeeds(access_token);
-		resp.getWriter().println(access_token);
-		
-		try {
-                FeedHierachyFactory fhf = new FeedHierachyFactory();
-                ArrayList<FeedReader> requests = new ArrayList<FeedReader>();
-                ArrayList<Future<JSONArray>> futures = new ArrayList<Future<JSONArray>>();
-                ArrayList<JSONArray> hierachies = new ArrayList<JSONArray>();
-
-                for (FeedReader fr : requests) {
-                    String[] texts = fr.getContents().toArray(new String[fr.getContents().size()]);
-                    String[] titles = fr.getTitles().toArray(new String[fr.getTitles().size()]);
-                    String[] ids = fr.getIds().toArray(new String[fr.getIds().size()]);
-                    futures.add(fhf.submitHierarchyRequest(texts, titles, ids, "COMPLETE", 1, 6, 6));
-                }
-                for (Future<JSONArray> ft : futures) {
-                    try {
-                        hierachies.add(ft.get());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        fhf.restart();
-                    }
-                }
-                fhf.shutDown();
-                System.out.println(hierachies.get(0).length() + " clusters:");
-                  for (int i = 0; i < hierachies.get(0).length(); ++i)
-                      System.out.println(hierachies.get(0).get(i));
-                  
-		} catch (Exception e) {
-		    e.printStackTrace();
-		}
 //		resp.getWriter().println(access_token);
+		FeedReader.getFeeds(access_token, 3);
+		
 	}
 
 	public static String HttpConnect(String method, String urlString, String postContent) {

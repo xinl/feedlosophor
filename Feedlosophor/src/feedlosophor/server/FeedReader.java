@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Future;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,20 +27,12 @@ import org.json.JSONWriter;
  */
 public class FeedReader {
 	private String token;
-	private List<String> titleList;
-	private List<String> idList;
-	private List<String> contentList;
+	public String topic;
+	public List<String> titleList;
+	public List<String> idList;
+	public List<String> contentList;
 	private static String feeds;
 	private static HashMap<String, ArrayList<ArrayList<String>>> feedList;
-	
-	/*
-	public FeedReader(String token) {
-		this.token = token;
-		this.titles = new ArrayList<String>();
-		this.ids = new ArrayList<String>();
-		this.contents = new ArrayList<String>();
-	}
-	*/
 	
 	
 	public List<String> getIds() {
@@ -62,9 +55,7 @@ public class FeedReader {
 	public static FeedReader getUnreadFeedsByStream(String token, String stream) {
 		return null;
 	}
-	
-	
-	public static HashMap<String, String> getTitles(String token) {
+	 public static HashMap<String, String> getFeedTitles(String token) {
 		String url = "https://www.google.com/reader/api/0/subscription/list?output=json&access_token=" + token;
 		String response = OauthVeriServlet.HttpConnect("GET", url, null); 
 		if (response == null) {
@@ -110,61 +101,17 @@ public class FeedReader {
 		return titles;
 	}
 	
-	public static HashMap<String, ArrayList<ArrayList<String>>> getFeeds(String token, int maxCount) {
-		HashMap<String, String> titles = getTitles(token);
+	public static String getFeeds(String token, int maxCount) {
+		HashMap<String, String> titles = getFeedTitles(token);
 		
-		String url = "https://www.google.com/reader/api/0/unread-count?output=json&access_token=" + token;
-		String response = OauthVeriServlet.HttpConnect("GET", url, null); 
-		JSONObject jo;
-		try {
-			jo = new JSONObject(response);
-		} catch (JSONException e) {
-			e.printStackTrace();
-			return null;
-		}
-		JSONArray ja;
-		try {
-			ja = jo.getJSONArray("unreadcounts");
-		} catch (JSONException e) {
-			e.printStackTrace();
-			return null;
-		}
-		String id;
 		JSONWriter jsonWriter;
-		try {
-			jsonWriter = new JSONStringer().object().key("feedList").object();
-		} catch (JSONException e2) {
-			e2.printStackTrace();
-			return null;
-		}
-		try {
-			for (int i = 0; i < ja.length(); i++) {
-				jo = ja.getJSONObject(i);
-				id = jo.getString("id");
-				jsonWriter = jsonWriter.key(id).object();
-				jsonWriter = jsonWriter.key("title").value(titles.get(id));
-				jsonWriter = jsonWriter.key("unread").value(jo.getString("count"));
-//				jsonWriter = jsonWriter.key("groups").value();
-				jsonWriter = jsonWriter.endObject();
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-			return null;
-		}
-		try {
-			jsonWriter = jsonWriter.endObject();
-		} catch (JSONException e2) {
-			e2.printStackTrace();
-			return null;
-		}
-		
 		feedList = new HashMap<String, ArrayList<ArrayList<String>>>();
-		url = "https://www.google.com/reader/api/0/stream/contents/?access_token=" + token + 
+		String url = "https://www.google.com/reader/api/0/stream/contents/?access_token=" + token + 
 				"&xt=user/-/state/com.google/read";
 		if (maxCount > 0) {
 			url += "&n=" + maxCount;
 		}
-		response = OauthVeriServlet.HttpConnect("GET", url, null); 
+		String response = OauthVeriServlet.HttpConnect("GET", url, null); 
 		String accountId;
 		String streamId;
 		String feedTitle;
@@ -172,9 +119,11 @@ public class FeedReader {
 		String feedLabel;
 		String feedContent;
 		JSONArray ja2 = null;
+		JSONArray ja = null;
+		JSONObject jo = null;
 		
 		try {
-			jsonWriter = jsonWriter.key("entryBank").object();
+			jsonWriter = new JSONStringer().object().key("entryBank").object();
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 			return null;
@@ -226,7 +175,93 @@ public class FeedReader {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		return feedList;
+		
+		ArrayList<FeedReader> requests = new ArrayList<FeedReader>();
+		ArrayList<JSONArray> hierachies = new ArrayList<JSONArray>();
+		for (Map.Entry<String, ArrayList<ArrayList<String>>> entry : feedList.entrySet()) {
+			FeedReader reader = new FeedReader();
+			reader.topic = entry.getKey();
+			reader.idList = entry.getValue().get(0);
+			reader.titleList = entry.getValue().get(1);
+			reader.contentList = entry.getValue().get(2);
+			requests.add(reader);
+		}
+		try {
+                FeedHierachyFactory fhf = new FeedHierachyFactory();
+                ArrayList<Future<JSONArray>> futures = new ArrayList<Future<JSONArray>>();
+
+                for (FeedReader fr : requests) {
+                    String[] texts = fr.getContents().toArray(new String[fr.getContents().size()]);
+                    String[] titless = fr.getTitles().toArray(new String[fr.getTitles().size()]);
+                    String[] ids = fr.getIds().toArray(new String[fr.getIds().size()]);
+                    futures.add(fhf.submitHierarchyRequest(texts, titless, ids, "COMPLETE", 1, 6, 6));
+                }
+                for (Future<JSONArray> ft : futures) {
+                    try {
+                        hierachies.add(ft.get());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        fhf.restart();
+                    }
+                }
+                fhf.shutDown();
+                System.out.println(hierachies.get(0).length() + " clusters:");
+                  for (int i = 0; i < hierachies.get(0).length(); ++i)
+                      System.out.println(hierachies.get(0).get(i));
+                  
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
+		
+		
+		url = "https://www.google.com/reader/api/0/unread-count?output=json&access_token=" + token;
+		response = OauthVeriServlet.HttpConnect("GET", url, null); 
+		try {
+			jo = new JSONObject(response);
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+		try {
+			ja = jo.getJSONArray("unreadcounts");
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+		String id;
+		try {
+			jsonWriter = jsonWriter.key("feedList").object();
+		} catch (JSONException e2) {
+			e2.printStackTrace();
+			return null;
+		}
+		try {
+			for (int i = 0; i < ja.length(); i++) {
+				jo = ja.getJSONObject(i);
+				id = jo.getString("id");
+				jsonWriter = jsonWriter.key(id).object();
+				jsonWriter = jsonWriter.key("title").value(titles.get(id));
+				jsonWriter = jsonWriter.key("unread").value(jo.getString("count"));
+				for (int k = 0; k < requests.size(); k++) {
+					if (requests.get(k).topic.equals(titles.get(id))) {
+						jsonWriter = jsonWriter.key("groups").value(hierachies.get(k).toString());
+					}
+				}
+				jsonWriter = jsonWriter.endObject();
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+		try {
+			jsonWriter = jsonWriter.endObject();
+		} catch (JSONException e2) {
+			e2.printStackTrace();
+			return null;
+		}
+		
+//		resp.getWriter().println(access_token);
+		return feeds;
 	}
 	
 	public static void PutInfo(String id, String feedId, String feedTitle, String feedContent) {

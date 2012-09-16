@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class LoginServlet extends HttpServlet {
+	/*
 	static String baseURL = "https://accounts.google.com/o/oauth2/auth";
 	static String clientID = "849962972797.apps.googleusercontent.com";
 	static String clientSecret = "Z8a46r3wehfKQIGfYSKxEs5j";
@@ -24,5 +25,6 @@ public class LoginServlet extends HttpServlet {
 			URLEncoder.encode(scope, "UTF-8") + "&response_type=code&client_id=" + URLEncoder.encode(clientID, "UTF-8");
 		resp.sendRedirect(url);
 	}
+	*/
 
 }
