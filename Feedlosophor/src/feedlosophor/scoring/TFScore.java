@@ -17,6 +17,12 @@ public class TFScore {
 	private Doc[] docs;
 
 	public TFScore(String[] contents, String[] titles, String[] ids, boolean enableStemming) {
+		
+		if (contents == null || titles == null || ids == null 
+				|| contents.length != titles.length || titles.length != ids.length)  {
+			return;
+		}
+		
 		// 1. parse each document
 		this.docs = new Doc[contents.length];
 		for (int i = 0; i < contents.length; i++) {
@@ -55,9 +61,7 @@ public class TFScore {
 
 	public TFScore(String[] contents, String[] titles, String[] ids) {
 
-
 		this(contents, titles, ids, false);
-
 
 	}
 

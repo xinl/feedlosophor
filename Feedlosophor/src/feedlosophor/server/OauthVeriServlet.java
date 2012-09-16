@@ -45,9 +45,9 @@ public class OauthVeriServlet extends HttpServlet {
 			return;
 		}
 		
-		FeedReader.getUnreadFeeds(access_token, 200);
+		resp.getWriter().println(FeedReader.getFeeds(access_token, 2));
 //		FeedReader reader = FeedReader.getUnreadFeeds(access_token);
-		resp.getWriter().println(access_token);
+//		resp.getWriter().println(access_token);
 	}
 
 	public static String HttpConnect(String method, String urlString, String postContent) {

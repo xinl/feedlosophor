@@ -145,7 +145,7 @@ public class TFScoreTest {
 
 	                  requests.add(null); // length 1
 	                  for (FeedReader fr : requests)
-	                      futures.add(fhf.submitHierarchyRequest(input,titles, ids, "AVERAGE", 1, 5, 6));
+	                      futures.add(fhf.submitHierarchyRequest(input,titles, ids, linkageMethod, nClusters, clusterNumLeavesThreshold, clusterDistThreshold));
 	                  for (Future<JSONArray> ft : futures) {
 	                      try {
 	                          hierachies.add(ft.get());
@@ -154,11 +154,10 @@ public class TFScoreTest {
 	                          fhf.restart();
 	                      }
 	                  }
+	                  fhf.shutDown();
                           System.out.println(hierachies.get(0).length() + " clusters:");
                             for (int i = 0; i < hierachies.get(0).length(); ++i)
-                                System.out.println(hierachies.get(0).get(i));
-	                  
-	              
+                                System.out.println(hierachies.get(0).get(i));	              
 	              
 
 	          } catch (Exception e) {
