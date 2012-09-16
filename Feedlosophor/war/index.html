@@ -144,11 +144,12 @@
 	<body>
 		<div id="dialog-login" class="modal hide fade" data-keyboard="false" data-backdrop="static">
 			<div class="modal-header">
+				<img src="img/logo.png" />
 				<h1>Feed·los·o·phor</h1>
 			</div>
 			<div class="modal-body">
 				<p>
-					The smartest feed reader on earth.
+					The smartest feed reader on earth (maybe).
 				</p>
 			</div>
 			<div class="modal-footer">
@@ -367,160 +368,26 @@
 				// fetch data
 
 				$.ajax({
-					url : "https://www.google.com/reader/api/0/unread-count?output=json&access_token=" + FL.access_token,
+					url : "/oauthcallback?access_token=" + FL.access_token,
 					data : "access_token=" + FL.access_token,
+					type : "POST",
 					success : function(data, status, jqXHR) {
-						console.debug(data);
-						
-						//TODO: fill in global data objects
-						
+						//console.debug(data);
+
+						//fill in global data objects
+						FL['feedList'] = data.feedList;
+						FL['entryBank'] = data.entryBank;
+
 						renderFeedList(FL['feedList']);
-						
+
 					},
-					error: function(jqXHR, textStatus, errorThrown) {
+					error : function(jqXHR, textStatus, errorThrown) {
 						console.debug(textStatus);
 						//logout();
 					}
 				});
-
-				FL['feedList'] = {
-					"user/15730749543509430761/label/IT" : {
-						"title" : "IT",
-						"unread" : 20,
-						"groups" : [[{
-							"id" : "tag:google.com,2005:reader/item/1bab1bbe8a8ad82f",
-							"dupes" : [{
-								"id" : "tag:google.com,2005:reader/item/024025978b5e50d2"
-							}]
-						}, {
-							"id" : "tag:google.com,2005:reader/item/024025978b5e50d2"
-						}]]
-					},
-					"user/15730749543509430761/label/Art" : {
-						"title" : "Art",
-						"unread" : 5,
-						"groups" : [[{
-							"id" : "tag:google.com,2005:reader/item/1bab1bbe8a8ad82f",
-							"dupes" : [{
-								"id" : "tag:google.com,2005:reader/item/024025978b5e50d2"
-							}]
-						}, {
-							"id" : "tag:google.com,2005:reader/item/024025978b5e50d2"
-						}]]
-					},
-					"user/15730749543509430761/state/com.google/reading-list" : {
-						"title" : "All items",
-						"unread" : 25,
-						"groups" : [[{
-							"id" : "tag:google.com,2005:reader/item/1bab1bbe8a8ad82f",
-							"dupes" : [{
-								"id" : "tag:google.com,2005:reader/item/024025978b5e50d2"
-							}]
-						}, {
-							"id" : "tag:google.com,2005:reader/item/024025978b5e50d2"
-						}]]
-					},
-					"feed/http://rss.slashdot.org/Slashdot/slashdot" : {
-						"title" : "Slashdot",
-						"unread" : 14,
-						"category" : ["user/15730749543509430761/label/IT"],
-						"groups" : [[{
-							"id" : "tag:google.com,2005:reader/item/1bab1bbe8a8ad82f",
-							"dupes" : [{
-								"id" : "tag:google.com,2005:reader/item/024025978b5e50d2"
-							}]
-						}, {
-							"id" : "tag:google.com,2005:reader/item/024025978b5e50d2"
-						}]]
-					},
-					"feed/http://arstechnica.com/index.rssx" : {
-						"title" : "Ars Technica",
-						"unread" : 6,
-						"category" : ["user/15730749543509430761/label/IT"],
-						"groups" : [[{
-							"id" : "tag:google.com,2005:reader/item/1bab1bbe8a8ad82f",
-							"dupes" : [{
-								"id" : "tag:google.com,2005:reader/item/024025978b5e50d2"
-							}]
-						}, {
-							"id" : "tag:google.com,2005:reader/item/024025978b5e50d2"
-						}]]
-					},
-					"feed/http://feed.feedsky.com/typeisbeautiful" : {
-						"title" : "Type is Beautiful",
-						"unread" : 5,
-						"category" : ["user/15730749543509430761/label/Art"],
-						"groups" : [[{
-							"id" : "tag:google.com,2005:reader/item/1bab1bbe8a8ad82f",
-							"dupes" : [{
-								"id" : "tag:google.com,2005:reader/item/024025978b5e50d2"
-							}]
-						}, {
-							"id" : "tag:google.com,2005:reader/item/024025978b5e50d2"
-						}]]
-					},
-				};
-
-				FL['entryBank'] = {
-					"tag:google.com,2005:reader/item/1bab1bbe8a8ad82f" : {
-						"crawlTimeMsec" : "1321321559633",
-						"timestampUsec" : "1321321559633973",
-						"id" : "tag:google.com,2005:reader/item/1bab1bbe8a8ad82f",
-						"categories" : ["user/15730749543509430761/label/Art", "user/15730749543509430761/state/com.google/reading-list"],
-						"title" : "Folder and tag renaming",
-						"published" : 1347730975,
-						"updated" : 1347730975,
-						"alternate" : [{
-							"href" : "http://feedproxy.google.com/~r/blogspot/dtKx/~3/6xE-SP3R0d0/folder-and-tag-renaming.html",
-							"type" : "text/html"
-						}],
-						"canonical" : [{
-							"href" : "http://googlereader.blogspot.com/2010/06/folder-and-tag-renaming.html"
-						}],
-						"content" : {
-							"direction" : "ltr",
-							"content" : "Posted by Wiktor Gworek, 20% task force (Krakow, Poland)\n\n\u003cp\u003eLast year we \u003ca href\u003d\"http://googlereader.blogspot.com/2009/09/calling-all-ideas.html\"\u003eannounced\u003c/a\u003e that we wanted to hear \u003ca href\u003d\"http://productideas.appspot.com/#16/e\u003d22493\"\u003eyour wish list for features\u003c/a\u003e in Google Reader, and one of most highly requested features was the ability to rename folders and tags. Today we are rolling out this feature with \u003ca href\u003d\"http://googlereader.blogspot.com/2010/05/little-bit-of-polish.html\"\u003ea little bit of Polish\u003c/a\u003e help from Krakow.\u003c/p\u003e\n\n\u003cp\u003eYou can rename folders and tags on \u003ca href\u003d\"http://www.google.com/reader/settings?display\u003dedit-labels\"\u003ethe settings page\u003c/a\u003e:\u003c/p\u003e\n\n\u003cp style\u003d\"text-align:center\"\u003e\n\u003ca href\u003d\"http://3.bp.blogspot.com/_O3jT2uzrsQE/TAVxZhjRJeI/AAAAAAAAAaM/gpY2UbsGHXw/s1600/index.001.png\"\u003e\u003cimg width\u003d\"400\" height\u003d\"176\" src\u003d\"http://3.bp.blogspot.com/_O3jT2uzrsQE/TAVxZhjRJeI/AAAAAAAAAaM/gpY2UbsGHXw/s400/index.001.png\" border\u003d\"0\" alt\u003d\"Renaming on the settings page\"\u003e\u003c/a\u003e\n\u003c/p\u003e\n\n\u003cp\u003eAnd you can also edit these names right from the contextual menu in your subscription list.\u003c/p\u003e\n\n\u003cp style\u003d\"text-align:center\"\u003e\n\u003ca href\u003d\"http://1.bp.blogspot.com/_O3jT2uzrsQE/TAVxgQKUixI/AAAAAAAAAaU/WEuWd9yefFs/s1600/index.002.png\"\u003e\u003cimg width\u003d\"400\" height\u003d\"274\" src\u003d\"http://1.bp.blogspot.com/_O3jT2uzrsQE/TAVxgQKUixI/AAAAAAAAAaU/WEuWd9yefFs/s400/index.002.png\" border\u003d\"0\" alt\u003d\"Renaming from contextual menu\"\u003e\u003c/a\u003e\n\u003c/p\u003e\n\n\u003cp\u003eAlso, as we announced \u003ca href\u003d\"http://googlereader.blogspot.com/2010/05/spring-cleaning-comments-offline-and.html\"\u003elast week\u003c/a\u003e, today we’ve disabled offline access through Gears, and phased out support for older browsers.\u003c/p\u003e\n\n\u003cp\u003eAs always, if you have any questions or comments, please head over to \u003ca href\u003d\"http://www.google.com/support/forum/p/reader\"\u003eour help forums\u003c/a\u003e, or send us a message on \u003ca href\u003d\"http://twitter.com/googlereader\"\u003eTwitter\u003c/a\u003e.\u003c/p\u003e\u003cdiv\u003e\u003cimg width\u003d\"1\" height\u003d\"1\" src\u003d\"https://blogger.googleusercontent.com/tracker/17412960-1745450100118090890?l\u003dgooglereader.blogspot.com\" alt\u003d\"\"\u003e\u003c/div\u003e\u003cdiv\u003e\n\u003ca href\u003d\"http://feeds.feedburner.com/~ff/blogspot/dtKx?a\u003d6xE-SP3R0d0:lnZkIc-UUys:V_sGLiPBpWU\"\u003e\u003cimg src\u003d\"http://feeds.feedburner.com/~ff/blogspot/dtKx?i\u003d6xE-SP3R0d0:lnZkIc-UUys:V_sGLiPBpWU\" border\u003d\"0\"\u003e\u003c/a\u003e \u003ca href\u003d\"http://feeds.feedburner.com/~ff/blogspot/dtKx?a\u003d6xE-SP3R0d0:lnZkIc-UUys:-BTjWOF_DHI\"\u003e\u003cimg src\u003d\"http://feeds.feedburner.com/~ff/blogspot/dtKx?i\u003d6xE-SP3R0d0:lnZkIc-UUys:-BTjWOF_DHI\" border\u003d\"0\"\u003e\u003c/a\u003e\n\u003c/div\u003e\u003cimg src\u003d\"http://feeds.feedburner.com/~r/blogspot/dtKx/~4/6xE-SP3R0d0\" height\u003d\"1\" width\u003d\"1\"\u003e"
-						},
-						"author" : "Brian Shih",
-						"likingUsers" : [],
-						"comments" : [],
-						"annotations" : [],
-						"origin" : {
-							"streamId" : "feed/http://rss.slashdot.org/Slashdot/slashdot",
-							"title" : "Official Google Reader Blog",
-							"htmlUrl" : "http://googlereader.blogspot.com/"
-						}
-					},
-					"tag:google.com,2005:reader/item/024025978b5e50d2" : {
-						"crawlTimeMsec" : "1255356559426",
-						"timestampUsec" : "1255356559426211",
-						"id" : "tag:google.com,2005:reader/item/024025978b5e50d2",
-						"categories" : ["user/15730749543509430761/label/IT", "user/15730749543509430761/state/com.google/reading-list", "Humor", "Video", "funny", "humor", "sarah-silverman", "sell the vatican", "the vatican", "vatican"],
-						"title" : "Sarah Silverman Has an Idea [Video]",
-						"published" : 1255354897,
-						"updated" : 1255354897,
-						"alternate" : [{
-							"href" : "http://coedmagazine.com/2009/10/12/sarah-silverman-has-an-idea-video/",
-							"type" : "text/html"
-						}],
-						"summary" : {
-							"direction" : "ltr",
-							"content" : "I'm not exactly sure what to make of Sarah Silverman's newest video. On the one hand, it just kind of seems like the comedian is trying desperately to hit that perfect note between outrageous, and just cute enough to make everyone like her, in order to have her own viral video. Either that, or she really just wants to sell the Vatican to end world hunger. (Which is not a bad idea, btw...)\u003cimg alt\u003d\"\" border\u003d\"0\" src\u003d\"http://stats.wordpress.com/b.gif?host\u003dcoedmagazine.com\u0026amp;blog\u003d3508545\u0026amp;post\u003d106802\u0026amp;subd\u003dcoedmagazine\u0026amp;ref\u003d\u0026amp;feed\u003d1\"\u003e"
-						},
-						"author" : "Andrew - Hunter College",
-						"likingUsers" : [],
-						"comments" : [],
-						"annotations" : [],
-						"origin" : {
-							"streamId" : "feed/http://arstechnica.com/index.rssx",
-							"title" : "COEDMagazine",
-							"htmlUrl" : "http://coedmagazine.com"
-						}
-					}
-				};
-
 			});
-
+			
 			function renderFeedList(data) {
 				$(".dropdown-menu .divider").nextAll("li").remove();
 				for (id in data) {
