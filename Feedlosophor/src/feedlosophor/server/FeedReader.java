@@ -41,19 +41,19 @@ public class FeedReader {
 	}
 	*/
 	
-	/*
+	
 	public List<String> getIds() {
-		return ids;
+		return idList;
 	}
 	
 	public List<String> getTitles() {
-		return titles;
+		return titleList;
 	}
 	
 	public List<String> getContents() {
-		return contents;
+		return contentList;
 	}
-	*/
+	
 	
 	public static FeedReader getUnreadFeedsByLabel(String token, String label) {
 		return null;
